@@ -10,12 +10,20 @@ SERVER_HOST = "0.0.0.0"
 SERVER_PORT = 5002  # port we want to use
 
 sock = None
+log_output = None
+
 separator_token = "<SEP>"  # we will use this to separate the client name & message
 client_sockets = None
 
 
 def sigterm_handler(_signum, _frame) -> None:
     sys.exit(1)
+
+
+def set_up():
+    global log_output
+    print("# Set up")
+    log_output = open("server-chat.log", "w", encoding="utf-8")
 
 
 def clean_up():
@@ -31,6 +39,10 @@ def clean_up():
     # close server socket
     if not (sock is None):
         sock.close()
+
+    # Close log file
+    if not(log_output is None):
+        log_output.close()
 
 
 def listen_for_client(cs):
@@ -103,6 +115,7 @@ def run_server():
 
 
 def main():
+    set_up()
     # 強制終了のシグナルを受け取ったら、強制終了するようにします
     signal.signal(signal.SIGTERM, sigterm_handler)
 

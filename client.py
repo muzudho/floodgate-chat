@@ -10,7 +10,7 @@ MESSAGE_SIZE = 1024
 
 
 sock = None
-out_file = None
+log_output = None
 
 
 def listen_for_messages():
@@ -19,6 +19,9 @@ def listen_for_messages():
     while True:
         message = sock.recv(MESSAGE_SIZE).decode()
 
+        # LOGIN:<username> OK
+        # LOGIN:incorrect
+
         date_now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         s = f"[{date_now}] > {message}\n"
 
@@ -26,25 +29,27 @@ def listen_for_messages():
         print(s)
 
         # Log
-        out_file.write(s)
-        out_file.flush()
+        log_output.write(s)
+        log_output.flush()
 
 
 def set_up():
+    global log_output
     print("# Set up")
-    global out_file
-    out_file = open("client-chat.log", "w", encoding="utf-8")
+    log_output = open("client-chat.log", "w", encoding="utf-8")
 
 
 def clean_up():
     print("# Clean up")
-    if not(out_file is None):
-        out_file.close()
+
+    # Close log file
+    if not(log_output is None):
+        log_output.close()
 
 
 def send_to(msg):
     global sock
-    global out_file
+    global log_output
 
     # Send to server
     sock.send(msg.encode())
@@ -56,8 +61,8 @@ def send_to(msg):
     print(s)
 
     # Log
-    out_file.write(s)
-    out_file.flush()
+    log_output.write(s)
+    log_output.flush()
 
 
 def run_client():
@@ -71,8 +76,7 @@ def run_client():
     print("[+] Connected.")
 
     # Hand shake
-    send_to(CLIENT_USER)
-    send_to(CLIENT_PASS)
+    send_to(f"LOGIN {CLIENT_USER} {CLIENT_PASS}")
 
     # make a thread that listens for messages to this client & print them
     thr = Thread(target=listen_for_messages)
