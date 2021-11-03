@@ -4,14 +4,10 @@ import signal
 import socket
 from threading import Thread
 from datetime import datetime
+from client_config import SERVER_HOST, SERVER_PORT, CLIENT_USER, CLIENT_PASS
 
 MESSAGE_SIZE = 1024
 
-# server's IP address
-# if the server is not on this machine,
-# put the private (network) IP address (e.g 192.168.1.2)
-SERVER_HOST = "wdoor.c.u-tokyo.ac.jp"
-SERVER_PORT = 4081
 
 sock = None
 out_file = None
@@ -31,16 +27,37 @@ def listen_for_messages():
 
         # Log
         out_file.write(s)
+        out_file.flush()
 
 
 def set_up():
+    print("# Set up")
     global out_file
-    out_file = open("chat.log", "w", encoding="utf-8")
+    out_file = open("client-chat.log", "w", encoding="utf-8")
 
 
 def clean_up():
+    print("# Clean up")
     if not(out_file is None):
         out_file.close()
+
+
+def send_to(msg):
+    global sock
+    global out_file
+
+    # Send to server
+    sock.send(msg.encode())
+
+    date_now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    s = f"[{date_now}] < {msg}\n"
+
+    # Display
+    print(s)
+
+    # Log
+    out_file.write(s)
+    out_file.flush()
 
 
 def run_client():
@@ -52,6 +69,10 @@ def run_client():
     print(f"[*] Connecting to {SERVER_HOST}:{SERVER_PORT}...")
     sock.connect((SERVER_HOST, SERVER_PORT))
     print("[+] Connected.")
+
+    # Hand shake
+    send_to(CLIENT_USER)
+    send_to(CLIENT_PASS)
 
     # make a thread that listens for messages to this client & print them
     thr = Thread(target=listen_for_messages)
@@ -69,11 +90,7 @@ def run_client():
             break
 
         # Send the message
-        sock.send(to_send.encode())
-
-        # Log
-        date_now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        out_file.write(f"[{date_now}] < {to_send}\n")
+        send_to(to_send)
 
 
 def main():
