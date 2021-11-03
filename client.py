@@ -1,25 +1,22 @@
 # このファイルを直接実行したときは、以下の関数を呼び出します
 import sys
 import signal
-import socket
 from threading import Thread
 from client_config import SERVER_HOST, SERVER_PORT, CLIENT_USER, CLIENT_PASS
 from scripts.client_p import ClientP
 from scripts.log_output import LogOutput, log_output
+from scripts.client_socket import ClientSocket, client_socket
 
-MESSAGE_SIZE = 1024
 
-
-sock = None
 client_p = None
 
 
 def listen_for_messages():
-    global sock
+    global client_socket
     global client_p
 
     while True:
-        message = sock.recv(MESSAGE_SIZE).decode()
+        message = client_socket.receive_message()
 
         # 1. 空行は無限に送られてくるので無視
         if message == '':
@@ -49,47 +46,14 @@ def clean_up():
         log_output.clean_up()
 
 
-def send_line(line):
-    global sock
-    global log_output
-
-    # 1. Change Newline (Windows to CSA Protocol)
-    if line.endswith('\r\n'):
-        print('1. Change Newline (Windows to CSA Protocol)')
-        line = line.rstrip('\r\n')
-        line = f"{line}\n"
-    elif line.endswith('\n'):
-        print('1. Newline Ok')
-    else:
-        # コマンドラインから打鍵したときは、改行が付いていません
-        print('1. Line without newline')
-        line = f"{line}\n"
-
-    # Send to server
-    sock.send(line.encode())
-
-    s = LogOutput.format_send(line)
-
-    # Display
-    print(s)
-
-    # Log
-    log_output.write(s)
-    log_output.flush()
-
-
 def run_client():
-    global sock
+    global client_socket
 
-    # initialize TCP socket
-    sock = socket.socket()
-    # connect to the server
-    print(f"[*] Connecting to {SERVER_HOST}:{SERVER_PORT}...")
-    sock.connect((SERVER_HOST, SERVER_PORT))
-    print("[+] Connected.")
+    client_socket.set_up()
+    client_socket.connect()
 
     # Hand shake
-    send_line(f"LOGIN {CLIENT_USER} {CLIENT_PASS}\n")
+    client_socket.send_line(f"LOGIN {CLIENT_USER} {CLIENT_PASS}\n")
 
     # make a thread that listens for messages to this client & print them
     thr = Thread(target=listen_for_messages)
@@ -100,6 +64,7 @@ def run_client():
 
     while True:
         # input message we want to send to the server
+        # 末尾に改行は付いていません
         to_send = input()
 
         # a way to exit the program
@@ -107,7 +72,7 @@ def run_client():
             break
 
         # Send the message
-        send_line(to_send)
+        client_socket.send_line(to_send)
 
 
 def main():
