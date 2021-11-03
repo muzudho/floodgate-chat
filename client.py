@@ -5,7 +5,7 @@ import socket
 from threading import Thread
 from datetime import datetime
 from client_config import SERVER_HOST, SERVER_PORT, CLIENT_USER, CLIENT_PASS
-from client_p import ClientP
+from scripts.client_p import ClientP
 
 MESSAGE_SIZE = 1024
 
@@ -29,8 +29,7 @@ def listen_for_messages():
         display_and_log_receive(message)
 
         # Parse
-        result = client_p.listen_line(message)
-        display_and_log_internal(result)
+        client_p.listen_line(message)
 
 
 def set_up():
