@@ -21,6 +21,11 @@ def listen_for_messages():
 
     while True:
         message = sock.recv(MESSAGE_SIZE).decode()
+
+        # 1. 空行は無限に送られてくるので無視
+        if message == '':
+            continue
+
         display_and_log_receive(message)
 
         # Parse
