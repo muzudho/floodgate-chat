@@ -19,8 +19,16 @@ def listen_for_messages():
     while True:
         message = sock.recv(MESSAGE_SIZE).decode()
 
-        # LOGIN:<username> OK
-        # LOGIN:incorrect
+        # ログイン成功時
+        # > LOGIN:<username> OK
+        # > LOGIN:e-gov-vote-kifuwarabe OK
+
+        # ログイン失敗時
+        # > LOGIN:incorrect
+
+        # ログアウト成功時
+        # < LOGOUT
+        # > LOGOUT:completed
 
         date_now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         s = f"[{date_now}] > {message}\n"
@@ -76,7 +84,7 @@ def run_client():
     print("[+] Connected.")
 
     # Hand shake
-    send_to(f"LOGIN {CLIENT_USER} {CLIENT_PASS}")
+    send_to(f"LOGIN {CLIENT_USER} {CLIENT_PASS}\n")
 
     # make a thread that listens for messages to this client & print them
     thr = Thread(target=listen_for_messages)
