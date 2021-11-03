@@ -28,6 +28,7 @@ class ClientSocket():
 
         # 1. Change Newline (Windows to CSA Protocol)
         if line.endswith('\r\n'):
+            # ここは通らないと思う
             print('1. Change Newline (Windows to CSA Protocol)')
             line = line.rstrip('\r\n')
             line = f"{line}\n"
