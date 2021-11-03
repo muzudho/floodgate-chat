@@ -14,6 +14,7 @@ SERVER_HOST = "wdoor.c.u-tokyo.ac.jp"
 SERVER_PORT = 4081
 
 sock = None
+out_file = None
 
 
 def listen_for_messages():
@@ -21,15 +22,25 @@ def listen_for_messages():
 
     while True:
         message = sock.recv(MESSAGE_SIZE).decode()
-        print("\n" + message)
+
+        date_now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        s = f"[{date_now}] > {message}\n"
+
+        # Display
+        print(s)
+
+        # Log
+        out_file.write(s)
 
 
 def set_up():
-    pass
+    global out_file
+    out_file = open("chat.log", "w", encoding="utf-8")
 
 
 def clean_up():
-    pass
+    if not(out_file is None):
+        out_file.close()
 
 
 def run_client():
@@ -60,9 +71,9 @@ def run_client():
         # Send the message
         sock.send(to_send.encode())
 
-        # Display
+        # Log
         date_now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        print(f"[{date_now}] {to_send}")
+        out_file.write(f"[{date_now}] < {to_send}\n")
 
 
 def main():
