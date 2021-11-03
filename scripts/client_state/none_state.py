@@ -11,8 +11,8 @@ class NoneState():
     def name(self):
         return "[None]"
 
-    def listen_line(self, line):
-        matched = self._login_ok_pattern.match(line)
+    def listen_text(self, text):
+        matched = self._login_ok_pattern.match(text)
         if matched:
             # ログイン成功
             return '<LoginOk>'

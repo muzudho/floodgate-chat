@@ -15,16 +15,16 @@ def listen_for_messages():
     global client_p
 
     while True:
-        message = client_socket.receive_message()
+        text = client_socket.receive_text()
 
         # 1. 空行は無限に送られてくるので無視
-        if message == '':
+        if text == '':
             continue
 
-        log_output.display_and_log_receive(message)
+        log_output.display_and_log_receive(text)
 
         # 処理は client_p に委譲します
-        client_p.listen_for_line(message)
+        client_p.listen_text(text)
 
 
 def set_up():

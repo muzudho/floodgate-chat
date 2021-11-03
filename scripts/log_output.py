@@ -8,16 +8,16 @@ class LogOutput():
         return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
     @classmethod
-    def format_send(clazz, message):
-        return f"[{LogOutput.date_now()}] < {message}\n"
+    def format_send(clazz, text):
+        return f"[{LogOutput.date_now()}] < {text}\n"
 
     @classmethod
-    def format_receive(clazz, message):
-        return f"[{LogOutput.date_now()}] > {message}\n"
+    def format_receive(clazz, text):
+        return f"[{LogOutput.date_now()}] > {text}\n"
 
     @classmethod
-    def format_internal(clazz, message):
-        return f"[{LogOutput.date_now()}] : {message}\n"
+    def format_internal(clazz, text):
+        return f"[{LogOutput.date_now()}] : {text}\n"
 
     def __init__(self):
         self._file = None

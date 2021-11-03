@@ -13,8 +13,8 @@ class ClientP():
     def login(self):
         client_socket.send_line(f"LOGIN {CLIENT_USER} {CLIENT_PASS}\n")
 
-    def listen_for_line(self, line):
-        result = self._state.listen_line(line)
+    def listen_text(self, text):
+        result = self._state.listen_text(text)
 
         if self._state == '[None]':
             if result == '<LoginOk>':
@@ -34,10 +34,10 @@ class ClientP():
 
 if __name__ == "__main__":
     """テストします"""
-    line = 'LOGIN:egov-kifuwarabe OK'
+    text = 'LOGIN:egov-kifuwarabe OK'
 
     client_p = ClientP()
-    result = client_p.listen_for_line(line)
+    result = client_p.listen_text(text)
     if result == '<LoginOk>':
         print('.', end='')
     else:
