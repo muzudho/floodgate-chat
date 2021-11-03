@@ -8,4 +8,4 @@ SERVER_PORT = 5002
 # [0-9A-za-z_-]32文字まで
 CLIENT_USER = 'e-gov-vote-kifuwarabe'
 # [0-9A-za-z_-]32文字まで
-CLIENT_PASS = 'floodgate-300-10F,egovvote-kif'
+CLIENT_PASS = 'floodgate-300-10F,egov-kif'

@@ -5,22 +5,24 @@ import socket
 from threading import Thread
 from datetime import datetime
 from client_config import SERVER_HOST, SERVER_PORT, CLIENT_USER, CLIENT_PASS
+from client_p import ClientP
 
 MESSAGE_SIZE = 1024
 
 
 sock = None
 log_output = None
+client_p = None
 
 
 def listen_for_messages():
     global sock
+    global client_p
 
     while True:
         message = sock.recv(MESSAGE_SIZE).decode()
 
-        date_now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-        s = f"[{date_now}] > {message}\n"
+        s = format_resv(message)
 
         # Display
         print(s)
@@ -29,11 +31,24 @@ def listen_for_messages():
         log_output.write(s)
         log_output.flush()
 
+        """
+        # Parse
+        result = client_p.lissonMessage(message)
+
+        s = format_log(result)
+        print(s)
+        log_output.write(s)
+        log_output.flush()
+        """
+
 
 def set_up():
     global log_output
+    global client_p
+
     print("# Set up")
     log_output = open("client-chat.log", "w", encoding="utf-8")
+    client_p = ClientP()
 
 
 def clean_up():
@@ -42,6 +57,19 @@ def clean_up():
     # Close log file
     if not(log_output is None):
         log_output.close()
+
+
+def date_now():
+    return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
+
+def format_resv(message):
+    return f"[{date_now()}] > {message}\n"
+
+
+def format_log(message):
+    date_now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    return f"[{date_now()}] : {message}\n"
 
 
 def send_to(msg):
