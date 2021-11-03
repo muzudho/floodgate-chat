@@ -1,6 +1,6 @@
-from scripts.log_output import LogOutput
 from scripts.client_state.logged_in_state import LoggedInState
 from scripts.client_state.none_state import NoneState
+from scripts.log_output import log_output
 
 
 class ClientP():
@@ -21,7 +21,7 @@ class ClientP():
         else:
             pass
 
-        # display_and_log_internal(result)
+        log_output.display_and_log_internal(result)
 
 
 if __name__ == "__main__":

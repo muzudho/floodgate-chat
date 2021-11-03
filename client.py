@@ -3,15 +3,14 @@ import sys
 import signal
 import socket
 from threading import Thread
-from datetime import datetime
 from client_config import SERVER_HOST, SERVER_PORT, CLIENT_USER, CLIENT_PASS
 from scripts.client_p import ClientP
+from scripts.log_output import LogOutput, log_output
 
 MESSAGE_SIZE = 1024
 
 
 sock = None
-log_output = None
 client_p = None
 
 
@@ -26,7 +25,7 @@ def listen_for_messages():
         if message == '':
             continue
 
-        display_and_log_receive(message)
+        log_output.display_and_log_receive(message)
 
         # Parse
         client_p.listen_line(message)
@@ -37,7 +36,8 @@ def set_up():
     global client_p
 
     print("# Set up")
-    log_output = open("client-chat.log", "w", encoding="utf-8")
+    log_output.set_up()
+
     client_p = ClientP()
 
 
@@ -46,42 +46,7 @@ def clean_up():
 
     # Close log file
     if not(log_output is None):
-        log_output.close()
-
-
-def date_now():
-    return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-
-
-def format_receive(message):
-    return f"[{date_now()}] > {message}\n"
-
-
-def display_and_log_receive(text):
-    s = format_receive(text)
-
-    # Display
-    print(s)
-
-    # Log
-    log_output.write(s)
-    log_output.flush()
-
-
-def display_and_log_internal(text):
-    s = format_internal(text)
-
-    # Display
-    print(s)
-
-    # Log
-    log_output.write(s)
-    log_output.flush()
-
-
-def format_internal(message):
-    date_now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    return f"[{date_now}] : {message}\n"
+        log_output.clean_up()
 
 
 def send_line(line):
@@ -103,8 +68,7 @@ def send_line(line):
     # Send to server
     sock.send(line.encode())
 
-    date_now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    s = f"[{date_now}] < {line}"
+    s = LogOutput.format_send(line)
 
     # Display
     print(s)
