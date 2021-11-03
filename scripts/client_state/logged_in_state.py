@@ -18,6 +18,10 @@ class LoggedInState():
         return self._game_id
 
     def listen_line(self, line):
+
+        if line == 'END Game_Summary':
+            return '<EndGameSummary>'
+
         matched = self._game_id_pattern.match(line)
         if matched:
             # ログイン成功

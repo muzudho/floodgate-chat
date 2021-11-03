@@ -23,8 +23,8 @@ def listen_for_messages():
 
         log_output.display_and_log_receive(message)
 
-        # Parse
-        client_p.listen_line(message)
+        # 処理は client_p に委譲します
+        client_p.listen_for_line(message)
 
 
 def set_up():
