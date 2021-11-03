@@ -22,3 +22,7 @@ server.py
 ```shell
 client.py
 ```
+
+## Other documents
+
+📖 [floodgateのログ](http://wdoor.c.u-tokyo.ac.jp/shogi/x/shogi-server.log)  

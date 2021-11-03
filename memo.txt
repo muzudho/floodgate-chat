@@ -44,3 +44,21 @@ P9+KY+KE+GI+KI+OU+KI+GI+KE+KY
 END Position
 END Game_Summary
         """
+
+
+
+
+
+
+
+
+AGREE
+要る？
+
+[2021-11-03 20:01:19] < AGREE
+
+[2021-11-03 20:02:02] > REJECT:wdoor+floodgate-300-10F+Yss1000k+e-gov-vote-kifuwarabe+20211103200003 
+by the Server (timed out)
+
+GameId省略できなかった？
+AGREE[ <GameID>]
