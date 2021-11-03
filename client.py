@@ -21,25 +21,14 @@ def listen_for_messages():
 
     while True:
         message = sock.recv(MESSAGE_SIZE).decode()
+        display_and_log_receive(message)
 
-        s = format_resv(message)
-
-        # Display
-        print(s)
-
-        # Log
-        log_output.write(s)
-        log_output.flush()
-
-        """
         # Parse
-        result = client_p.lissonMessage(message)
+        result = client_p.lisson(message)
+        display_and_log_internal(result)
 
-        s = format_log(result)
-        print(s)
-        log_output.write(s)
-        log_output.flush()
-        """
+        if result == "<LoginOk>":
+            pass
 
 
 def set_up():
@@ -63,11 +52,33 @@ def date_now():
     return datetime.now().strftime('%Y-%m-%d %H:%M:%S')
 
 
-def format_resv(message):
+def format_receive(message):
     return f"[{date_now()}] > {message}\n"
 
 
-def format_log(message):
+def display_and_log_receive(text):
+    s = format_receive(text)
+
+    # Display
+    print(s)
+
+    # Log
+    log_output.write(s)
+    log_output.flush()
+
+
+def display_and_log_internal(text):
+    s = format_internal(text)
+
+    # Display
+    print(s)
+
+    # Log
+    log_output.write(s)
+    log_output.flush()
+
+
+def format_internal(message):
     date_now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     return f"[{date_now()}] : {message}\n"
 
