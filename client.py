@@ -80,18 +80,30 @@ def display_and_log_internal(text):
 
 def format_internal(message):
     date_now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    return f"[{date_now()}] : {message}\n"
+    return f"[{date_now}] : {message}\n"
 
 
-def send_to(msg):
+def send_line(line):
     global sock
     global log_output
 
+    # 1. Change Newline (Windows to CSA Protocol)
+    if line.endswith('\r\n'):
+        print('1. Change Newline (Windows to CSA Protocol)')
+        line = line.rstrip('\r\n')
+        line = f"{line}\n"
+    elif line.endswith('\n'):
+        print('1. Newline Ok')
+    else:
+        # コマンドラインから打鍵したときは、改行が付いていません
+        print('1. Line without newline')
+        line = f"{line}\n"
+
     # Send to server
-    sock.send(msg.encode())
+    sock.send(line.encode())
 
     date_now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
-    s = f"[{date_now}] < {msg}\n"
+    s = f"[{date_now}] < {line}"
 
     # Display
     print(s)
@@ -112,7 +124,7 @@ def run_client():
     print("[+] Connected.")
 
     # Hand shake
-    send_to(f"LOGIN {CLIENT_USER} {CLIENT_PASS}\n")
+    send_line(f"LOGIN {CLIENT_USER} {CLIENT_PASS}\n")
 
     # make a thread that listens for messages to this client & print them
     thr = Thread(target=listen_for_messages)
@@ -130,7 +142,7 @@ def run_client():
             break
 
         # Send the message
-        send_to(to_send)
+        send_line(to_send)
 
 
 def main():
