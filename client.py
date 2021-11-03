@@ -19,17 +19,6 @@ def listen_for_messages():
     while True:
         message = sock.recv(MESSAGE_SIZE).decode()
 
-        # ログイン成功時
-        # > LOGIN:<username> OK
-        # > LOGIN:e-gov-vote-kifuwarabe OK
-
-        # ログイン失敗時
-        # > LOGIN:incorrect
-
-        # ログアウト成功時
-        # < LOGOUT
-        # > LOGOUT:completed
-
         date_now = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
         s = f"[{date_now}] > {message}\n"
 
