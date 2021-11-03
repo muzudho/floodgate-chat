@@ -7,7 +7,11 @@ class NoneState():
         # Example: `LOGIN:e-gov-vote-kifuwarabe OK`
         self._login_ok_pattern = re.compile(r'^LOGIN:[0-9A-Za-z_-]{1,32} OK$')
 
-    def lisson(self, line):
+    @property
+    def name(self):
+        return "[None]"
+
+    def listen_line(self, line):
         matched = self._login_ok_pattern.match(line)
         if matched:
             # ログイン成功

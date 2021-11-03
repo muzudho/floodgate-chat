@@ -24,11 +24,8 @@ def listen_for_messages():
         display_and_log_receive(message)
 
         # Parse
-        result = client_p.lisson(message)
+        result = client_p.listen_line(message)
         display_and_log_internal(result)
-
-        if result == "<LoginOk>":
-            pass
 
 
 def set_up():
