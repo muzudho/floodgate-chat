@@ -2,10 +2,9 @@
 import sys
 import signal
 from threading import Thread
-from client_config import SERVER_HOST, SERVER_PORT, CLIENT_USER, CLIENT_PASS
 from scripts.client_p import ClientP
-from scripts.log_output import LogOutput, log_output
-from scripts.client_socket import ClientSocket, client_socket
+from scripts.log_output import log_output
+from scripts.client_socket import client_socket
 
 
 client_p = None
@@ -51,9 +50,7 @@ def run_client():
 
     client_socket.set_up()
     client_socket.connect()
-
-    # Hand shake
-    client_socket.send_line(f"LOGIN {CLIENT_USER} {CLIENT_PASS}\n")
+    client_p.login()
 
     # make a thread that listens for messages to this client & print them
     thr = Thread(target=listen_for_messages)

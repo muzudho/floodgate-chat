@@ -1,11 +1,16 @@
 from scripts.client_state.logged_in_state import LoggedInState
 from scripts.client_state.none_state import NoneState
 from scripts.log_output import log_output
+from scripts.client_socket import client_socket
+from client_config import CLIENT_USER, CLIENT_PASS
 
 
 class ClientP():
     def __init__(self):
         self._state = NoneState()
+
+    def login(self):
+        client_socket.send_line(f"LOGIN {CLIENT_USER} {CLIENT_PASS}\n")
 
     def listen_line(self, line):
         result = self._state.listen_line(line)
