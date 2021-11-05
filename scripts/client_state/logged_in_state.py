@@ -20,12 +20,12 @@ class LoggedInState():
     def listen_line(self, line):
 
         if line == 'END Game_Summary':
-            return '<EndGameSummary>'
+            return '<EndGameSummary/>'
 
         matched = self._game_id_pattern.match(line)
         if matched:
             # ログイン成功
             self._game_id = matched.group(1)
-            return '<GameId>'
+            return '<GameId/>'
 
         return '<LoggedInState.Unknown>'

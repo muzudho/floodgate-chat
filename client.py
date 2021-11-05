@@ -84,6 +84,7 @@ def main():
     # 強制終了のシグナルを受け取ったら、強制終了するようにします
     signal.signal(signal.SIGTERM, sigterm_handler)
     set_up()
+
     try:
         run_client()
     finally:

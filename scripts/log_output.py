@@ -38,7 +38,7 @@ class LogOutput():
     def flush(self):
         self._file.flush()
 
-    def display_and_log_receive(send, text):
+    def display_and_log_receive(self, text):
         s = LogOutput.format_receive(text)
 
         # Display
@@ -48,7 +48,7 @@ class LogOutput():
         log_output.write(s)
         log_output.flush()
 
-    def display_and_log_internal(send, text):
+    def display_and_log_internal(self, text):
         s = LogOutput.format_internal(text)
 
         # Display
