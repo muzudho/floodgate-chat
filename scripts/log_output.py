@@ -42,7 +42,7 @@ class LogOutput():
         s = LogOutput.format_receive(text)
 
         # Display
-        print(s)
+        print(s, end='')
 
         # Log
         log_output.write(s)

@@ -15,11 +15,13 @@ class ClientP():
 
     def listen_line(self, line):
         result = self._state.listen_line(line)
+        log_output.display_and_log_internal(
+            f"result=[{result}] self._state.name=[{self._state.name}]")
 
-        if self._state == '[None]':
+        if self._state.name == '[None]':
             if result == '<NoneState.LoginOk/>':
                 self._state = LoggedInState()
-        elif self._state == '[LoggedIn]':
+        elif self._state.name == '[LoggedIn]':
             if result == '<GameId/>':
                 # Game ID を取得
                 self._game_id = self._sate.game_id
@@ -28,8 +30,6 @@ class ClientP():
                 client_socket.send_line(f"AGREE {self._game_id}\n")
         else:
             pass
-
-        log_output.display_and_log_internal(result)
 
 
 if __name__ == "__main__":
