@@ -15,16 +15,21 @@ def listen_for_messages():
     global client_p
 
     while True:
-        text = client_socket.receive_text()
+        text_block = client_socket.receive_text_block()
 
         # 1. 空行は無限に送られてくるので無視
-        if text == '':
+        if text_block == '':
             continue
 
-        log_output.display_and_log_receive(text)
+        log_output.display_and_log_receive(text_block)
 
-        # 処理は client_p に委譲します
-        client_p.listen_text(text)
+        # TODO 受け取った行を、改行でスプリットできるか？
+        lines = text_block.split('\n')
+        for line in lines:
+            log_output.display_and_log_receive(f"<LINE>{line}</LINE>")
+
+            # 処理は client_p に委譲します
+            client_p.listen_line(line)
 
 
 def set_up():

@@ -18,8 +18,9 @@ class ClientSocket():
         self._sock.connect((SERVER_HOST, SERVER_PORT))
         print("[+] Connected.")
 
-    def receive_text(self):
+    def receive_text_block(self):
         """一行ずつではなく複数行を一気に受け取ることもある"""
+
         return self._sock.recv(MESSAGE_SIZE).decode()
 
     def send_line(self, line):

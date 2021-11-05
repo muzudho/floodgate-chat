@@ -13,12 +13,12 @@ class ClientP():
     def login(self):
         client_socket.send_line(f"LOGIN {CLIENT_USER} {CLIENT_PASS}\n")
 
-    def listen_text(self, text):
-        result = self._state.listen_text(text)
+    def listen_line(self, line):
+        result = self._state.listen_line(line)
 
         if self._state == '[None]':
-            if result == '<LoginOk>':
-                self._sate = LoggedInState()
+            if result == '<NoneState.LoginOk/>':
+                self._state = LoggedInState()
         elif self._state == '[LoggedIn]':
             if result == '<GameId>':
                 # Game ID を取得
@@ -34,11 +34,11 @@ class ClientP():
 
 if __name__ == "__main__":
     """テストします"""
-    text = 'LOGIN:egov-kifuwarabe OK'
+    line = 'LOGIN:egov-kifuwarabe OK'
 
     client_p = ClientP()
-    result = client_p.listen_text(text)
-    if result == '<LoginOk>':
+    result = client_p.listen_line(line)
+    if result == '<NoneState.LoginOk/>':
         print('.', end='')
     else:
         print('f', end='')

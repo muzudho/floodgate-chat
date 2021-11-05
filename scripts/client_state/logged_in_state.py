@@ -17,15 +17,15 @@ class LoggedInState():
     def game_id(self):
         return self._game_id
 
-    def listen_text(self, text):
+    def listen_line(self, line):
 
-        if text == 'END Game_Summary':
+        if line == 'END Game_Summary':
             return '<EndGameSummary>'
 
-        matched = self._game_id_pattern.match(text)
+        matched = self._game_id_pattern.match(line)
         if matched:
             # ログイン成功
             self._game_id = matched.group(1)
             return '<GameId>'
 
-        return '<Unknown>'
+        return '<LoggedInState.Unknown>'

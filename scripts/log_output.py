@@ -1,5 +1,7 @@
 from datetime import datetime
 
+LOG_FILE_NAME = 'client-chat.log'
+
 
 class LogOutput():
 
@@ -23,7 +25,7 @@ class LogOutput():
         self._file = None
 
     def set_up(self):
-        self._file = open("client-chat.log", "w", encoding="utf-8")
+        self._file = open(LOG_FILE_NAME, "w", encoding="utf-8")
 
     def clean_up(self):
         # Close log file
