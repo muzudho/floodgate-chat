@@ -9,7 +9,7 @@ class NoneState():
 
     @property
     def name(self):
-        return "[None]"
+        return "<None/>"
 
     def listen_line(self, line):
         matched = self._login_ok_pattern.match(line)
@@ -18,3 +18,16 @@ class NoneState():
             return '<NoneState.LoginOk/>'
 
         return '<NoneState.Unknown>'
+
+
+# Test
+# python.exe "./scripts/client_state/none_state.py"
+if __name__ == "__main__":
+    line = 'LOGIN:egov-kifuwarabe OK'
+
+    none_state = NoneState()
+    result = none_state.listen_line(line)
+    if result == '<NoneState.LoginOk/>':
+        print('.', end='')
+    else:
+        print('f', end='')

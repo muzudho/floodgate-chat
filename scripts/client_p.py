@@ -14,14 +14,16 @@ class ClientP():
         client_socket.send_line(f"LOGIN {CLIENT_USER} {CLIENT_PASS}\n")
 
     def listen_line(self, line):
+        print(f"listen_line: line=[{line}]")
+
         result = self._state.listen_line(line)
         log_output.display_and_log_internal(
-            f"result=[{result}] self._state.name=[{self._state.name}]")
+            f"self._state.name=[{self._state.name}] result=[{result}]")
 
-        if self._state.name == '[None]':
+        if self._state.name == '<None/>':
             if result == '<NoneState.LoginOk/>':
                 self._state = LoggedInState()
-        elif self._state.name == '[LoggedIn]':
+        elif self._state.name == '<LoggedIn/>':
             if result == '<GameId/>':
                 # Game ID を取得
                 self._game_id = self._state.game_id

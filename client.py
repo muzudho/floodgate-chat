@@ -26,6 +26,12 @@ def listen_for_messages():
         # TODO 受け取った行を、改行でスプリットできるか？
         lines = text_block.split('\n')
         for line in lines:
+
+            # 例えば 'abc\n' を '\n' でスプリットすると 'abc' と '' になって、
+            # 空文字列ができる。これは無視します
+            if line == '':
+                continue
+
             log_output.display_and_log_receive(f"<LINE>{line}</LINE>")
 
             # 処理は client_p に委譲します
