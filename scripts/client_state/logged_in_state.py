@@ -11,7 +11,7 @@ class LoggedInState():
 
     @property
     def name(self):
-        return "<LoggedIn/>"
+        return "<LoggedInState/>"
 
     @property
     def game_id(self):

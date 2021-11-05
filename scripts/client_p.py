@@ -20,10 +20,10 @@ class ClientP():
         log_output.display_and_log_internal(
             f"self._state.name=[{self._state.name}] result=[{result}]")
 
-        if self._state.name == '<None/>':
+        if self._state.name == '<NoneState/>':
             if result == '<NoneState.LoginOk/>':
                 self._state = LoggedInState()
-        elif self._state.name == '<LoggedIn/>':
+        elif self._state.name == '<LoggedInState/>':
             if result == '<GameId/>':
                 # Game ID を取得
                 self._game_id = self._state.game_id

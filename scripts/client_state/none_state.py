@@ -9,7 +9,7 @@ class NoneState():
 
     @property
     def name(self):
-        return "<None/>"
+        return "<NoneState/>"
 
     def listen_line(self, line):
         matched = self._login_ok_pattern.match(line)
