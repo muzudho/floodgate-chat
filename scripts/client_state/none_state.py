@@ -11,7 +11,7 @@ class NoneState():
     def name(self):
         return "<NoneState/>"
 
-    def listen_line(self, line):
+    def parse_line(self, line):
         matched = self._login_ok_pattern.match(line)
         if matched:
             # ログイン成功
@@ -26,7 +26,7 @@ if __name__ == "__main__":
     line = 'LOGIN:egov-kifuwarabe OK'
 
     none_state = NoneState()
-    result = none_state.listen_line(line)
+    result = none_state.parse_line(line)
     if result == '<NoneState.LoginOk/>':
         print('.', end='')
     else:

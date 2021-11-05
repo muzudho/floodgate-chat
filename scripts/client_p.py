@@ -13,10 +13,10 @@ class ClientP():
     def login(self):
         client_socket.send_line(f"LOGIN {CLIENT_USER} {CLIENT_PASS}\n")
 
-    def listen_line(self, line):
-        print(f"listen_line: line=[{line}]")
+    def parse_line(self, line):
+        print(f"parse_line: line=[{line}]")
 
-        result = self._state.listen_line(line)
+        result = self._state.parse_line(line)
         log_output.display_and_log_internal(
             f"self._state.name=[{self._state.name}] result=[{result}]")
 
@@ -39,7 +39,7 @@ if __name__ == "__main__":
     line = 'LOGIN:egov-kifuwarabe OK'
 
     client_p = ClientP()
-    result = client_p.listen_line(line)
+    result = client_p.parse_line(line)
     if result == '<NoneState.LoginOk/>':
         print('.', end='')
     else:

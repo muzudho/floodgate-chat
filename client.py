@@ -35,7 +35,7 @@ def listen_for_messages():
             log_output.display_and_log_receive(f"<LINE>{line}</LINE>")
 
             # 処理は client_p に委譲します
-            client_p.listen_line(line)
+            client_p.parse_line(line)
 
 
 def set_up():

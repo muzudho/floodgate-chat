@@ -1,5 +1,23 @@
+import re
+
+
 class Position():
     def __init__(self):
+
+        # 開始局面
+        # Example:
+        # P1-KY-KE-GI-KI-OU-KI-GI-KE-KY
+        # P2 * -HI *  *  *  *  * -KA *
+        # P3-FU-FU-FU-FU-FU-FU-FU-FU-FU
+        # P4 *  *  *  *  *  *  *  *  *
+        # P5 *  *  *  *  *  *  *  *  *
+        # P6 *  *  *  *  *  *  *  *  *
+        # P7+FU+FU+FU+FU+FU+FU+FU+FU+FU
+        # P8 * +KA *  *  *  *  * +HI *
+        # P9+KY+KE+GI+KI+OU+KI+GI+KE+KY
+        self._patternP = re.compile(
+            r"^P(\d)(.{3})(.{3})(.{3})(.{3})(.{3})(.{3})(.{3})(.{3})(.{3})$")
+
         # 将棋盤
         self._board = [''] * 100
 
