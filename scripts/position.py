@@ -170,34 +170,42 @@ class Position():
         """将棋盤の描画"""
 
         def __prettyHands(indexes):
-            a = '{: >3}'.format(self._hands[indexes[0]])
-            b = '{: >3}'.format(self._hands[indexes[1]])
-            c = '{: >3}'.format(self._hands[indexes[2]])
-            d = '{: >3}'.format(self._hands[indexes[3]])
-            e = '{: >3}'.format(self._hands[indexes[4]])
-            f = '{: >3}'.format(self._hands[indexes[5]])
-            g = '{: >3}'.format(self._hands[indexes[6]])
+            def __eraseZero(n):
+                if n == 0:
+                    return ''
+                return n
+
+            a = '{: >3}'.format(__eraseZero(self._hands[indexes[0]]))
+            b = '{: >3}'.format(__eraseZero(self._hands[indexes[1]]))
+            c = '{: >3}'.format(__eraseZero(self._hands[indexes[2]]))
+            d = '{: >3}'.format(__eraseZero(self._hands[indexes[3]]))
+            e = '{: >3}'.format(__eraseZero(self._hands[indexes[4]]))
+            f = '{: >3}'.format(__eraseZero(self._hands[indexes[5]]))
+            g = '{: >3}'.format(__eraseZero(self._hands[indexes[6]]))
             return a, b, c, d, e, f, g
 
         def __prettyBoardRow(indexes):
-            a = '{: >3}'.format(self._board[indexes[0]])
-            b = '{: >3}'.format(self._board[indexes[1]])
-            c = '{: >3}'.format(self._board[indexes[2]])
-            d = '{: >3}'.format(self._board[indexes[3]])
-            e = '{: >3}'.format(self._board[indexes[4]])
-            f = '{: >3}'.format(self._board[indexes[5]])
-            g = '{: >3}'.format(self._board[indexes[6]])
-            h = '{: >3}'.format(self._board[indexes[7]])
-            i = '{: >3}'.format(self._board[indexes[8]])
+            def __eraseAsterisk(s):
+                if s == ' * ':
+                    return '   '
+                return s
+
+            a = '{: >3}'.format(__eraseAsterisk(self._board[indexes[0]]))
+            b = '{: >3}'.format(__eraseAsterisk(self._board[indexes[1]]))
+            c = '{: >3}'.format(__eraseAsterisk(self._board[indexes[2]]))
+            d = '{: >3}'.format(__eraseAsterisk(self._board[indexes[3]]))
+            e = '{: >3}'.format(__eraseAsterisk(self._board[indexes[4]]))
+            f = '{: >3}'.format(__eraseAsterisk(self._board[indexes[5]]))
+            g = '{: >3}'.format(__eraseAsterisk(self._board[indexes[6]]))
+            h = '{: >3}'.format(__eraseAsterisk(self._board[indexes[7]]))
+            i = '{: >3}'.format(__eraseAsterisk(self._board[indexes[8]]))
             return a, b, c, d, e, f, g, h, i
 
         # 後手の持ち駒、経過時間
         tim2 = f'{self._expendTimes[2]: >6}'
         a, b, c, d, e, f, g = __prettyHands([8, 9, 10, 11, 12, 13, 14])
-        print(f" HI  KA  KI  GI  KE  KY  FU   TIME")
-        print(f"+---+---+---+---+---+---+---+ ")
-        print(f"|{a}|{b}|{c}|{d}|{e}|{f}|{g}| {tim2}")
-        print(f"+---+---+---+---+---+---+---+ ")
+        print(f"  HI  KA  KI  GI  KE  KY  FU    TIME")
+        print(f"|{a} {b} {c} {d} {e} {f} {g}| {tim2}")
         print(f"")
         # 盤
         print(f"  9   8   7   6   5   4   3   2   1    ")
@@ -242,10 +250,10 @@ class Position():
         tim1 = f'{self._expendTimes[1]: >6}'
         a, b, c, d, e, f, g = __prettyHands([1, 2, 3, 4, 5, 6, 7])
         print(f"")
-        print(f" Time    HI  KA  KI  GI  KE  KY  FU  ")
-        print(f"        +---+---+---+---+---+---+---+")
-        print(f" {tim1} |{a}|{b}|{c}|{d}|{e}|{f}|{g}|")
-        print(f"        +---+---+---+---+---+---+---+")
+        print(f"   Time   HI  KA  KI  GI  KE  KY  FU  ")
+        print(f" {tim1} |{a} {b} {c} {d} {e} {f} {g}|")
+        print(f"")
+        print(f". . . . . . . . . . . . . . . . . . . .")
         print(f"")
 
 
