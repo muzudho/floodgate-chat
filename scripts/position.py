@@ -283,3 +283,42 @@ if __name__ == "__main__":
 
     position = Position()
     position.printBoard()
+
+    # 開始局面
+    # Example:
+    # P1-KY-KE-GI-KI-OU-KI-GI-KE-KY
+    # P2 * -HI *  *  *  *  * -KA *
+    # P3-FU-FU-FU-FU-FU-FU-FU-FU-FU
+    # P4 *  *  *  *  *  *  *  *  *
+    # P5 *  *  *  *  *  *  *  *  *
+    # P6 *  *  *  *  *  *  *  *  *
+    # P7+FU+FU+FU+FU+FU+FU+FU+FU+FU
+    # P8 * +KA *  *  *  *  * +HI *
+    # P9+KY+KE+GI+KI+OU+KI+GI+KE+KY
+
+    position.parse_line('P1-KY-KE-GI-KI-OU-KI-GI-KE-KY')
+    position.printBoard()
+
+    position.parse_line('P2 * -HI *  *  *  *  * -KA * ')
+    position.printBoard()
+
+    position.parse_line('P3-FU-FU-FU-FU-FU-FU-FU-FU-FU')
+    position.printBoard()
+
+    position.parse_line('P4 *  *  *  *  *  *  *  *  * ')
+    position.printBoard()
+
+    position.parse_line('P5 *  *  *  *  *  *  *  *  * ')
+    position.printBoard()
+
+    position.parse_line('P6 *  *  *  *  *  *  *  *  * ')
+    position.printBoard()
+
+    position.parse_line('P7+FU+FU+FU+FU+FU+FU+FU+FU+FU')
+    position.printBoard()
+
+    position.parse_line('P8 * +KA *  *  *  *  * +HI * ')
+    position.printBoard()
+
+    position.parse_line('P9+KY+KE+GI+KI+OU+KI+GI+KE+KY')
+    position.printBoard()
