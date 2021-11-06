@@ -7,75 +7,71 @@ from scripts.log_output import log_output
 from scripts.client_socket import client_socket
 
 
-client_p = None
+class Client():
+    def __init__(self):
+        self._client_p = None
 
+    def set_up(self):
+        global log_output
 
-def listen_for_messages():
-    global client_socket
-    global client_p
+        print("# Set up")
+        log_output.set_up()
 
-    while True:
-        text_block = client_socket.receive_text_block()
+        self._client_p = ClientP()
 
-        # 1. 空行は無限に送られてくるので無視
-        if text_block == '':
-            continue
+    def clean_up(self):
+        print("# Clean up")
 
-        log_output.display_and_log_receive(text_block)
+        # Close log file
+        if not(log_output is None):
+            log_output.clean_up()
 
-        # 受信したテキストブロックを行の配列にして返します
-        lines = SplitTextBlock(text_block)
-        for line in lines:
+    def run(self):
+        global client_socket
 
-            log_output.display_and_log_receive(line)
+        client_socket.set_up()
+        client_socket.connect()
+        self._client_p.login()
 
-            # 処理は client_p に委譲します
-            client_p.parse_line(line)
+        # make a thread that listens for messages to this client & print them
+        thr = Thread(target=self.listen_for_messages)
+        # make the thread daemon so it ends whenever the main thread ends
+        thr.daemon = True
+        # start the thread
+        thr.start()
 
+        while True:
+            # input message we want to send to the server
+            # 末尾に改行は付いていません
+            to_send = input()
 
-def set_up():
-    global log_output
-    global client_p
+            # a way to exit the program
+            if to_send.lower() == 'q':
+                break
 
-    print("# Set up")
-    log_output.set_up()
+            # Send the message
+            client_socket.send_line(to_send)
 
-    client_p = ClientP()
+    def listen_for_messages(self):
+        global client_socket
 
+        while True:
+            text_block = client_socket.receive_text_block()
 
-def clean_up():
-    print("# Clean up")
+            # 1. 空行は無限に送られてくるので無視
+            if text_block == '':
+                continue
 
-    # Close log file
-    if not(log_output is None):
-        log_output.clean_up()
+            log_output.display_and_log_receive(text_block)
 
+            # 受信したテキストブロックを行の配列にして返します
+            lines = SplitTextBlock(text_block)
+            for line in lines:
 
-def run_client():
-    global client_socket
+                log_output.display_and_log_receive(line)
 
-    client_socket.set_up()
-    client_socket.connect()
-    client_p.login()
-
-    # make a thread that listens for messages to this client & print them
-    thr = Thread(target=listen_for_messages)
-    # make the thread daemon so it ends whenever the main thread ends
-    thr.daemon = True
-    # start the thread
-    thr.start()
-
-    while True:
-        # input message we want to send to the server
-        # 末尾に改行は付いていません
-        to_send = input()
-
-        # a way to exit the program
-        if to_send.lower() == 'q':
-            break
-
-        # Send the message
-        client_socket.send_line(to_send)
+                # 処理は client_p に委譲します
+                self._client_p.parse_line(line)
 
 
 def main():
@@ -84,15 +80,16 @@ def main():
 
     # 強制終了のシグナルを受け取ったら、強制終了するようにします
     signal.signal(signal.SIGTERM, sigterm_handler)
-    set_up()
+    client = Client()
+    client.set_up()
 
     try:
-        run_client()
+        client.run()
     finally:
         # 強制終了のシグナルを無視するようにしてから、クリーンアップ処理へ進みます
         signal.signal(signal.SIGTERM, signal.SIG_IGN)
         signal.signal(signal.SIGINT, signal.SIG_IGN)
-        clean_up()
+        client.clean_up()
         # 強制終了のシグナルを有効に戻します
         signal.signal(signal.SIGTERM, signal.SIG_DFL)
         signal.signal(signal.SIGINT, signal.SIG_DFL)
