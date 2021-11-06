@@ -322,3 +322,13 @@ if __name__ == "__main__":
 
     position.parse_line('P9+KY+KE+GI+KI+OU+KI+GI+KE+KY')
     position.printBoard()
+
+    # 指し手
+    # Example: +7776FU
+    # Example: -8384FU
+
+    position.parse_line('+7776FU')
+    position.printBoard()
+
+    position.parse_line('-8384FU')
+    position.printBoard()

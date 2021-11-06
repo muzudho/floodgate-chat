@@ -9,6 +9,11 @@ class LoggedInState():
         self._game_id_pattern = re.compile(r'^Game_ID:([0-9A-Za-z_+-]+)$')
         self._game_id = ''
 
+        # Format: `START:<GameID>`
+        # Example: `START:wdoor+floodgate-300-10F+e-gov-vote-kifuwarabe+Kristallweizen-Core2Duo-P7450+20211105220005`
+        self._start_pattern = re.compile(r'^START:([0-9A-Za-z_+-]+)$')
+        self._start_game_id = ''
+
     @property
     def name(self):
         return "<LoggedInState/>"
@@ -19,13 +24,22 @@ class LoggedInState():
 
     def parse_line(self, line):
 
+        # 初期局面終了
         if line == 'END Game_Summary':
-            return '<EndGameSummary/>'
+            return '<LoggedInState.EndGameSummary/>'
 
+        # Game_ID
         matched = self._game_id_pattern.match(line)
         if matched:
             # ログイン成功
             self._game_id = matched.group(1)
-            return '<GameId/>'
+            return '<LoggedInState.GameId/>'
+
+        # START
+        matched = self._start_pattern.match(line)
+        if matched:
+            # 対局合意成立
+            self._start_game_id = matched.group(1)
+            return '<LoggedInState.Start/>'
 
         return '<LoggedInState.Unknown>'

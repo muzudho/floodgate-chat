@@ -22,14 +22,20 @@ class ClientP():
 
         if self._state.name == '<NoneState/>':
             if result == '<NoneState.LoginOk/>':
+                # ログインした
                 self._state = LoggedInState()
+
         elif self._state.name == '<LoggedInState/>':
-            if result == '<GameId/>':
+            if result == '<LoggedInState.GameId/>':
                 # Game ID を取得
                 self._game_id = self._state.game_id
-            elif result == '<EndGameSummary/>':
+            elif result == '<LoggedInState.EndGameSummary/>':
+                # 初期局面終了
                 # 常に AGREE を返します
                 client_socket.send_line(f"AGREE {self._game_id}\n")
+            elif result == '<LoggedInState.Start/>':
+                # TODO 対局成立
+                pass
         else:
             pass
 
