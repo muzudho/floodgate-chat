@@ -2,7 +2,7 @@
 import sys
 import signal
 from threading import Thread
-from scripts.client_p import ClientP
+from scripts.client_p import ClientP, SplitTextBlock
 from scripts.log_output import log_output
 from scripts.client_socket import client_socket
 
@@ -23,16 +23,11 @@ def listen_for_messages():
 
         log_output.display_and_log_receive(text_block)
 
-        # TODO 受け取った行を、改行でスプリットできるか？
-        lines = text_block.split('\n')
+        # 受信したテキストブロックを行の配列にして返します
+        lines = SplitTextBlock(text_block)
         for line in lines:
 
-            # 例えば 'abc\n' を '\n' でスプリットすると 'abc' と '' になって、
-            # 空文字列ができる。これは無視します
-            if line == '':
-                continue
-
-            log_output.display_and_log_receive(f"<LINE>{line}</LINE>")
+            log_output.display_and_log_receive(line)
 
             # 処理は client_p に委譲します
             client_p.parse_line(line)

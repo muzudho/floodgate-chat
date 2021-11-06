@@ -6,11 +6,27 @@ from scripts.client_socket import client_socket
 from client_config import CLIENT_USER, CLIENT_PASS
 
 
+def SplitTextBlock(text_block):
+    """受信したテキストブロックを行の配列にして返します"""
+    lines = text_block.split('\n')
+
+    # 例えば 'abc\n' を '\n' でスプリットすると 'abc' と '' になって、
+    # 最後に空文字列ができます。これは無視します
+    if lines[len(lines)-1] == '':
+        lines = lines[:-1]
+
+    return lines
+
+
 class ClientP():
     def __init__(self):
         self._state = NoneState()
         self._game_id = ''
         self._start_game_id = ''
+
+    @property
+    def state(self):
+        return self._state
 
     def login(self):
         client_socket.send_line(f"LOGIN {CLIENT_USER} {CLIENT_PASS}\n")
@@ -45,15 +61,3 @@ class ClientP():
 
         else:
             pass
-
-
-if __name__ == "__main__":
-    """テストします"""
-    line = 'LOGIN:egov-kifuwarabe OK'
-
-    client_p = ClientP()
-    result = client_p.parse_line(line)
-    if result == '<NoneState.LoginOk/>':
-        print('.', end='')
-    else:
-        print('f', end='')
