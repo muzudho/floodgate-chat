@@ -15,13 +15,14 @@ class Position():
         # P7+FU+FU+FU+FU+FU+FU+FU+FU+FU
         # P8 * +KA *  *  *  *  * +HI *
         # P9+KY+KE+GI+KI+OU+KI+GI+KE+KY
-        self._begin_pos_pattern = re.compile(
+        self._begin_pos_row_pattern = re.compile(
             r"^P(\d)(.{3})(.{3})(.{3})(.{3})(.{3})(.{3})(.{3})(.{3})(.{3})$")
 
         # 指し手
-        # Example: +7776FU
-        # Example: -8384FU
-        self._move_pattern = re.compile(r"^([+-])(\d{2})(\d{2})(\w{2})$")
+        # Format: `<先後><元升><先升><駒>,T<秒>`
+        # Example: `+5756FU,T20`
+        self._move_pattern = re.compile(
+            r"^([+-])(\d{2})(\d{2})(\w{2}),T(\d+)$")
 
         # 将棋盤
         self._board = [''] * 100
@@ -39,7 +40,7 @@ class Position():
 
     def parse_line(self, line):
         # 開始局面
-        matched = self._begin_pos_pattern.match(line)
+        matched = self._begin_pos_row_pattern.match(line)
         if matched:
             rank = int(matched.group(1))
             self._board[90 + rank] = matched.group(2)
@@ -52,7 +53,7 @@ class Position():
             self._board[20 + rank] = matched.group(9)
             self._board[10 + rank] = matched.group(10)
 
-            return
+            return '<Position.BeginPosRow/>'
 
         # 指し手
         result = self._move_pattern.match(line)
@@ -150,7 +151,9 @@ class Position():
             # 移動先に駒を置く
             self._board[destination] = srcPc
 
-            return
+            return '<Position.Move/>'
+
+        return '<Position.Unknown/>'
 
     def printBoard(self):
         """将棋盤の描画"""
@@ -332,11 +335,11 @@ if __name__ == "__main__":
     position.printBoard()
 
     # 指し手
-    # Example: +7776FU
-    # Example: -8384FU
+    # Example: +7776FU,T20
+    # Example: -8384FU,T1
 
-    position.parse_line('+7776FU')
+    position.parse_line('+7776FU,T20')
     position.printBoard()
 
-    position.parse_line('-8384FU')
+    position.parse_line('-8384FU,T1')
     position.printBoard()
