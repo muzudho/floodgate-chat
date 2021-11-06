@@ -4,20 +4,6 @@ import re
 class Position():
     def __init__(self):
 
-        # 開始局面
-        # Example:
-        # P1-KY-KE-GI-KI-OU-KI-GI-KE-KY
-        # P2 * -HI *  *  *  *  * -KA *
-        # P3-FU-FU-FU-FU-FU-FU-FU-FU-FU
-        # P4 *  *  *  *  *  *  *  *  *
-        # P5 *  *  *  *  *  *  *  *  *
-        # P6 *  *  *  *  *  *  *  *  *
-        # P7+FU+FU+FU+FU+FU+FU+FU+FU+FU
-        # P8 * +KA *  *  *  *  * +HI *
-        # P9+KY+KE+GI+KI+OU+KI+GI+KE+KY
-        self._begin_pos_row_pattern = re.compile(
-            r"^P(\d)(.{3})(.{3})(.{3})(.{3})(.{3})(.{3})(.{3})(.{3})(.{3})$")
-
         # 自分または相手の指し手と、その消費時間
         # Format: `<先後><元升><先升><駒>,T<秒>`
         # Example: `+5756FU,T20`
@@ -45,21 +31,6 @@ class Position():
         return self._hands
 
     def parse_line(self, line):
-        # 開始局面
-        matched = self._begin_pos_row_pattern.match(line)
-        if matched:
-            rank = int(matched.group(1))
-            self._board[90 + rank] = matched.group(2)
-            self._board[80 + rank] = matched.group(3)
-            self._board[70 + rank] = matched.group(4)
-            self._board[60 + rank] = matched.group(5)
-            self._board[50 + rank] = matched.group(6)
-            self._board[40 + rank] = matched.group(7)
-            self._board[30 + rank] = matched.group(8)
-            self._board[20 + rank] = matched.group(9)
-            self._board[10 + rank] = matched.group(10)
-
-            return '<Position.BeginPosRow/>'
 
         # 指し手
         result = self._move_pattern.match(line)

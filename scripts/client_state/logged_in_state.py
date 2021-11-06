@@ -1,4 +1,5 @@
 import re
+from scripts.position import Position
 
 
 class LoggedInState():
@@ -23,6 +24,22 @@ class LoggedInState():
         self._start_pattern = re.compile(r'^START:([0-9A-Za-z_+-]+)$')
         self._start_game_id = ''
 
+        # 開始局面の各行
+        # Example:
+        # P1-KY-KE-GI-KI-OU-KI-GI-KE-KY
+        # P2 * -HI *  *  *  *  * -KA *
+        # P3-FU-FU-FU-FU-FU-FU-FU-FU-FU
+        # P4 *  *  *  *  *  *  *  *  *
+        # P5 *  *  *  *  *  *  *  *  *
+        # P6 *  *  *  *  *  *  *  *  *
+        # P7+FU+FU+FU+FU+FU+FU+FU+FU+FU
+        # P8 * +KA *  *  *  *  * +HI *
+        # P9+KY+KE+GI+KI+OU+KI+GI+KE+KY
+        self._begin_pos_row_pattern = re.compile(
+            r"^P(\d)(.{3})(.{3})(.{3})(.{3})(.{3})(.{3})(.{3})(.{3})(.{3})$")
+
+        self._position = Position()
+
     @property
     def name(self):
         return "<LoggedInState/>"
@@ -34,6 +51,10 @@ class LoggedInState():
     @property
     def start_game_id(self):
         return self._start_game_id
+
+    @property
+    def position(self):
+        return self._position
 
     def parse_line(self, line):
 
@@ -61,6 +82,22 @@ class LoggedInState():
             # ログイン成功
             self._game_id = matched.group(1)
             return '<LoggedInState.GameId/>'
+
+        # 開始局面の各行
+        matched = self._begin_pos_row_pattern.match(line)
+        if matched:
+            rank = int(matched.group(1))
+            self._position.board[90 + rank] = matched.group(2)
+            self._position.board[80 + rank] = matched.group(3)
+            self._position.board[70 + rank] = matched.group(4)
+            self._position.board[60 + rank] = matched.group(5)
+            self._position.board[50 + rank] = matched.group(6)
+            self._position.board[40 + rank] = matched.group(7)
+            self._position.board[30 + rank] = matched.group(8)
+            self._position.board[20 + rank] = matched.group(9)
+            self._position.board[10 + rank] = matched.group(10)
+
+            return '<Position.BeginPosRow/>'
 
         # START
         matched = self._start_pattern.match(line)

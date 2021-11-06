@@ -62,7 +62,11 @@ class ClientP():
             elif result == '<LoggedInState.Start/>':
                 # 対局成立
                 self._start_game_id = self._state.start_game_id
-                self._state = GameState()
+
+                # 次のステートへ引継ぎ
+                next_state = GameState()
+                next_state.position = self._state.position
+                self._state = next_state
 
         elif self._state.name == '<GameState/>':
             pass
