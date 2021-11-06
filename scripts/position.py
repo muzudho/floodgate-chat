@@ -204,8 +204,8 @@ class Position():
         # 後手の持ち駒、経過時間
         tim2 = f'{self._expendTimes[2]: >6}'
         a, b, c, d, e, f, g = __prettyHands([8, 9, 10, 11, 12, 13, 14])
-        print(f"  HI  KA  KI  GI  KE  KY  FU    TIME")
-        print(f"|{a} {b} {c} {d} {e} {f} {g}| {tim2}")
+        print(f"   TIME   HI  KA  KI  GI  KE  KY  FU")
+        print(f" {tim2} |{a} {b} {c} {d} {e} {f} {g}|")
         print(f"")
         # 盤
         print(f"  9   8   7   6   5   4   3   2   1    ")
