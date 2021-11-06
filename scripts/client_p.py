@@ -1,5 +1,6 @@
-from scripts.client_state.logged_in_state import LoggedInState
 from scripts.client_state.none_state import NoneState
+from scripts.client_state.logged_in_state import LoggedInState
+from scripts.client_state.game_state import GameState
 from scripts.log_output import log_output
 from scripts.client_socket import client_socket
 from client_config import CLIENT_USER, CLIENT_PASS
@@ -9,6 +10,7 @@ class ClientP():
     def __init__(self):
         self._state = NoneState()
         self._game_id = ''
+        self._start_game_id = ''
 
     def login(self):
         client_socket.send_line(f"LOGIN {CLIENT_USER} {CLIENT_PASS}\n")
@@ -34,8 +36,13 @@ class ClientP():
                 # 常に AGREE を返します
                 client_socket.send_line(f"AGREE {self._game_id}\n")
             elif result == '<LoggedInState.Start/>':
-                # TODO 対局成立
-                pass
+                # 対局成立
+                self._start_game_id = self._state.start_game_id
+                self._state = GameState()
+
+        elif self._state.name == '<GameState/>':
+            pass
+
         else:
             pass
 

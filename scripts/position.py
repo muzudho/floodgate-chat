@@ -29,6 +29,14 @@ class Position():
         # 持駒の数 [未使用, ▲飛, ▲角, ▲金, ▲銀, ▲桂, ▲香, ▲歩, ▽飛, ▽角, ▽金, ▽銀, ▽桂, ▽香, ▽歩]
         self._hands = [0] * 15
 
+    @property
+    def board(self):
+        return self._board
+
+    @property
+    def hands(self):
+        return self._hands
+
     def parse_line(self, line):
         # 開始局面
         matched = self._begin_pos_pattern.match(line)

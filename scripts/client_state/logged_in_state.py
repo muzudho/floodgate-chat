@@ -22,6 +22,10 @@ class LoggedInState():
     def game_id(self):
         return self._game_id
 
+    @property
+    def start_game_id(self):
+        return self._start_game_id
+
     def parse_line(self, line):
 
         # 初期局面終了
