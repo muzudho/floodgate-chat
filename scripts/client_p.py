@@ -24,9 +24,22 @@ class ClientP():
         self._game_id = ''
         self._start_game_id = ''
 
+        def none_func():
+            pass
+
+        self._agree_func = none_func
+
     @property
     def state(self):
         return self._state
+
+    @property
+    def agree_func(self):
+        return self._agree_func
+
+    @agree_func.setter
+    def agree_func(self, func):
+        self._agree_func = func
 
     def login(self):
         client_socket.send_line(f"LOGIN {CLIENT_USER} {CLIENT_PASS}\n")
@@ -50,7 +63,7 @@ class ClientP():
             elif result == '<LoggedInState.EndGameSummary/>':
                 # 初期局面終了
                 # 常に AGREE を返します
-                client_socket.send_line(f"AGREE {self._game_id}\n")
+                self._agree_func()
             elif result == '<LoggedInState.Start/>':
                 # 対局成立
                 self._start_game_id = self._state.start_game_id

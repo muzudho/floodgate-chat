@@ -1,20 +1,29 @@
+import sys
+import signal
+from threading import Thread
+from client import Client
 from scripts.client_p import ClientP, SplitTextBlock
+from scripts.log_output import log_output
+from scripts.client_socket import client_socket
 
-# Test
-# python.exe "./scripts/client_p.py"
-if __name__ == "__main__":
-    """テストします"""
-    client_p = ClientP()
 
-    # Send `LOGIN e-gov-vote-kifuwarabe floodgate-300-10F,egov-kif`
-    received = 'LOGIN:egov-kifuwarabe OK'
-    client_p.parse_line(received)
-    if client_p.state.name == '<LoggedInState/>':
-        print('.')
-    else:
-        print('f')
+def test():
+    def sigterm_handler(_signum, _frame) -> None:
+        sys.exit(1)
 
-    received = """BEGIN Game_Summary
+    # 強制終了のシグナルを受け取ったら、強制終了するようにします
+    signal.signal(signal.SIGTERM, sigterm_handler)
+    client = Client()
+    client.set_up()
+
+    try:
+        # Send `LOGIN e-gov-vote-kifuwarabe floodgate-300-10F,egov-kif`
+        received = 'LOGIN:egov-kifuwarabe OK'
+        client.client_p.parse_line(received)
+        if client.client_p.state.name != '<LoggedInState/>':
+            print('Unimplemented login')
+
+        received = """BEGIN Game_Summary
 Protocol_Version:1.2
 Protocol_Mode:Server
 Format:Shogi 1.0
@@ -48,12 +57,27 @@ END Position
 END Game_Summary
 """
 
-    lines = SplitTextBlock(received)
+        lines = SplitTextBlock(received)
 
-    for line in lines:
-        result = client_p.parse_line(line)
+        for line in lines:
+            _result = client.client_p.parse_line(line)
 
-    if client_p.state.name == '<GameState/>':
-        print('.')
-    else:
-        print('f')
+        if client.client_p.state.name != '<GameState/>':
+            print(
+                f'Unimplemented begin board. client.client_p.state.name=[{client.client_p.state.name}]')
+
+    finally:
+        # 強制終了のシグナルを無視するようにしてから、クリーンアップ処理へ進みます
+        signal.signal(signal.SIGTERM, signal.SIG_IGN)
+        signal.signal(signal.SIGINT, signal.SIG_IGN)
+        client.clean_up()
+        # 強制終了のシグナルを有効に戻します
+        signal.signal(signal.SIGTERM, signal.SIG_DFL)
+        signal.signal(signal.SIGINT, signal.SIG_DFL)
+
+
+# Test
+# python.exe "./scripts/client_p.py"
+if __name__ == "__main__":
+    """テストします"""
+    sys.exit(test())

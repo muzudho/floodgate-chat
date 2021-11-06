@@ -1,4 +1,3 @@
-# このファイルを直接実行したときは、以下の関数を呼び出します
 import sys
 import signal
 from threading import Thread
@@ -10,6 +9,10 @@ from scripts.client_socket import client_socket
 class Client():
     def __init__(self):
         self._client_p = None
+
+    @property
+    def client_p(self):
+        return self._client_p
 
     def set_up(self):
         global log_output
@@ -83,6 +86,12 @@ def main():
     client = Client()
     client.set_up()
 
+    # Implement handlers
+    def __agree_func():
+        client_socket.send_line(f"AGREE {client.client_p._game_id}\n")
+
+    client.client_p.agree_func = __agree_func
+
     try:
         client.run()
     finally:
@@ -95,5 +104,6 @@ def main():
         signal.signal(signal.SIGINT, signal.SIG_DFL)
 
 
+# このファイルを直接実行したときは、以下の関数を呼び出します
 if __name__ == "__main__":
     sys.exit(main())

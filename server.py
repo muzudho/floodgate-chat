@@ -1,3 +1,4 @@
+'''
 import socket
 from threading import Thread
 import sys
@@ -134,3 +135,4 @@ def main():
 # このファイルを直接実行したときは、以下の関数を呼び出します
 if __name__ == "__main__":
     sys.exit(main())
+'''
