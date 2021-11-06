@@ -12,6 +12,10 @@ class GameState():
     def name(self):
         return "<GameState/>"
 
+    @property
+    def position(self):
+        return self._position
+
     def parse_line(self, line):
         result = self._position.parse_line(line)
 

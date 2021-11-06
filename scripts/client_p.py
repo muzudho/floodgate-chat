@@ -2,8 +2,6 @@ from scripts.client_state.none_state import NoneState
 from scripts.client_state.logged_in_state import LoggedInState
 from scripts.client_state.game_state import GameState
 from scripts.log_output import log_output
-from scripts.client_socket import client_socket
-from client_config import CLIENT_USER, CLIENT_PASS
 
 
 def SplitTextBlock(text_block):
@@ -41,15 +39,12 @@ class ClientP():
     def agree_func(self, func):
         self._agree_func = func
 
-    def login(self):
-        client_socket.send_line(f"LOGIN {CLIENT_USER} {CLIENT_PASS}\n")
-
     def parse_line(self, line):
-        print(f"parse_line: line=[{line}]")
+        # print(f"parse_line: line=[{line}]")
 
         result = self._state.parse_line(line)
         log_output.display_and_log_internal(
-            f"self._state.name=[{self._state.name}] result=[{result}]")
+            f"[DEBUG] state=[{self._state.name}] result=[{result}]")
 
         if self._state.name == '<NoneState/>':
             if result == '<NoneState.LoginOk/>':

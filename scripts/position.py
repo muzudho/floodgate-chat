@@ -30,6 +30,9 @@ class Position():
         # 持駒の数 [未使用, ▲飛, ▲角, ▲金, ▲銀, ▲桂, ▲香, ▲歩, ▽飛, ▽角, ▽金, ▽銀, ▽桂, ▽香, ▽歩]
         self._hands = [0] * 15
 
+        # 手番
+        self._turn = '+'
+
         # 経過時間 [未使用, 先手, 後手]
         self._expendTimes = [0, 0, 0]
 
@@ -200,6 +203,11 @@ class Position():
             h = '{: >3}'.format(__eraseAsterisk(self._board[indexes[7]]))
             i = '{: >3}'.format(__eraseAsterisk(self._board[indexes[8]]))
             return a, b, c, d, e, f, g, h, i
+
+        tu = f"{self._turn: >4}"
+        print(f"Turn")
+        print(f"{tu}")
+        print("")
 
         # 後手の持ち駒、経過時間
         tim2 = f'{self._expendTimes[2]: >6}'

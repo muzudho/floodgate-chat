@@ -1,10 +1,7 @@
 import sys
 import signal
-from threading import Thread
 from client import Client
-from scripts.client_p import ClientP, SplitTextBlock
-from scripts.log_output import log_output
-from scripts.client_socket import client_socket
+from scripts.client_p import SplitTextBlock
 
 
 def test():
@@ -15,6 +12,14 @@ def test():
     signal.signal(signal.SIGTERM, sigterm_handler)
     client = Client()
     client.set_up()
+
+    # Implement test handlers
+    def __agree_func():
+        """AGREE を送ると、 START: が返ってくるというシナリオ"""
+        received = 'START:wdoor+floodgate-300-10F+e-gov-vote-kifuwarabe+Kristallweizen-Core2Duo-P7450+20211105220005'
+        client.client_p.parse_line(received)
+
+    client.client_p.agree_func = __agree_func
 
     try:
         # Send `LOGIN e-gov-vote-kifuwarabe floodgate-300-10F,egov-kif`
@@ -60,11 +65,17 @@ END Game_Summary
         lines = SplitTextBlock(received)
 
         for line in lines:
-            _result = client.client_p.parse_line(line)
+            print(
+                f"[DEBUG] state=[{client.client_p.state.name}] line=[{line}]")
+            client.client_p.parse_line(line)
 
         if client.client_p.state.name != '<GameState/>':
             print(
                 f'Unimplemented begin board. client.client_p.state.name=[{client.client_p.state.name}]')
+
+        client.client_p.state.position.printBoard()
+
+        # TODO 自分が先手か後手か判定
 
     finally:
         # 強制終了のシグナルを無視するようにしてから、クリーンアップ処理へ進みます

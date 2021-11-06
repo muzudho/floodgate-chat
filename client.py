@@ -4,6 +4,7 @@ from threading import Thread
 from scripts.client_p import ClientP, SplitTextBlock
 from scripts.log_output import log_output
 from scripts.client_socket import client_socket
+from client_config import CLIENT_USER, CLIENT_PASS
 
 
 class Client():
@@ -30,11 +31,14 @@ class Client():
             log_output.clean_up()
 
     def run(self):
+        """自動対話"""
         global client_socket
 
         client_socket.set_up()
         client_socket.connect()
-        self._client_p.login()
+
+        # Login
+        client_socket.send_line(f"LOGIN {CLIENT_USER} {CLIENT_PASS}\n")
 
         # make a thread that listens for messages to this client & print them
         thr = Thread(target=self.listen_for_messages)
@@ -86,7 +90,7 @@ def main():
     client = Client()
     client.set_up()
 
-    # Implement handlers
+    # Implement all handlers
     def __agree_func():
         client_socket.send_line(f"AGREE {client.client_p._game_id}\n")
 
