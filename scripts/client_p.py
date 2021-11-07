@@ -19,6 +19,7 @@ def SplitTextBlock(text_block):
 class ClientP():
     def __init__(self):
         self._state = NoneState()
+        self._user_name = ''
         self._game_id = ''
         self._start_game_id = ''
 
@@ -30,6 +31,14 @@ class ClientP():
     @property
     def state(self):
         return self._state
+
+    @property
+    def user_name(self):
+        return self._user_name
+
+    @user_name.setter
+    def user_name(self, val):
+        self._user_name = val
 
     @property
     def agree_func(self):
@@ -49,7 +58,14 @@ class ClientP():
         if self._state.name == '<NoneState/>':
             if result == '<NoneState.LoginOk/>':
                 # ログインした
-                self._state = LoggedInState()
+
+                # 読み取った情報の記憶
+                self._user_name = self._state.user_name
+                print(f'読み取った情報の記憶 user_name=[{self._state.user_name}]')
+
+                # 次のステートへ引継ぎ
+                next_state = LoggedInState()
+                self._state = next_state
 
         elif self._state.name == '<LoggedInState/>':
             if result == '<LoggedInState.GameId/>':

@@ -28,8 +28,10 @@ class Test():
         self._client.clean_up()
 
     def run(self):
+
         # Send `LOGIN e-gov-vote-kifuwarabe floodgate-300-10F,egov-kif`
-        received = 'LOGIN:egov-kifuwarabe OK'
+
+        received = 'LOGIN:e-gov-vote-kifuwarabe OK'
         self._client.client_p.parse_line(received)
         if self._client.client_p.state.name != '<LoggedInState/>':
             print('Unimplemented login')
@@ -82,6 +84,16 @@ END Game_Summary
         self._client.client_p.state.position.printBoard()
 
         # TODO 自分が先手か後手か判定
+        if self._client.client_p.user_name == self._client.client_p.state.player_names[1]:
+            my_turn = '+'
+        elif self._client.client_p.user_name == self._client.client_p.state.player_names[2]:
+            my_turn = '-'
+        else:
+            raise ValueError(
+                f'先手後手判定失敗。 user_name=[{self._client.client_p.user_name}] +=[{self._client.client_p.state.player_names[1]}] -=[{self._client.client_p.state.player_names[2]}]')
+
+        print(
+            f"[DEBUG] my_turn=[{my_turn}]")
 
 
 def test():
