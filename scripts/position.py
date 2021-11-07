@@ -14,7 +14,7 @@ class Position():
         self._turn = '+'
 
         # 経過時間 [未使用, 先手, 後手]
-        self._expendTimes = [0, 0, 0]
+        self._expend_times = [0, 0, 0]
 
     @property
     def board(self):
@@ -65,7 +65,7 @@ class Position():
         print("")
 
         # 後手の持ち駒、経過時間
-        tim2 = f'{self._expendTimes[2]: >6}'
+        tim2 = f'{self._expend_times[2]: >6}'
         a, b, c, d, e, f, g = __prettyHands([8, 9, 10, 11, 12, 13, 14])
         print(f"   TIME   HI  KA  KI  GI  KE  KY  FU")
         print(f" {tim2} |{a} {b} {c} {d} {e} {f} {g}|")
@@ -110,7 +110,7 @@ class Position():
         print(f"|{a}|{b}|{c}|{d}|{e}|{f}|{g}|{h}|{i}| 9")
         print(f"+---+---+---+---+---+---+---+---+---+  ")
         # 先手の経過時間、持ち駒
-        tim1 = f'{self._expendTimes[1]: >6}'
+        tim1 = f'{self._expend_times[1]: >6}'
         a, b, c, d, e, f, g = __prettyHands([1, 2, 3, 4, 5, 6, 7])
         print(f"")
         print(f"   Time   HI  KA  KI  GI  KE  KY  FU  ")

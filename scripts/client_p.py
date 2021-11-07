@@ -79,8 +79,8 @@ class ClientP():
 
                 # 読み取った情報の記憶
                 self._user_name = self._state.user_name
-                print(
-                    f'読み取った情報の記憶 user_name=[{self._state.user_name}]')
+                # print(
+                #    f'読み取った情報の記憶 user_name=[{self._state.user_name}]')
 
                 # 次のステートへ引継ぎ
                 next_state = LoggedInState()
@@ -101,8 +101,8 @@ class ClientP():
                 # 読み取った情報の記憶
                 self._my_turn = self._state.my_turn
                 self._current_turn = self._state.startpos_turn
-                print(
-                    f'読み取った情報の記憶 my_turn=[{self._state.my_turn}] startpos_turn=[{self._state.startpos_turn}]')
+                # print(
+                #     f'読み取った情報の記憶 my_turn=[{self._state.my_turn}] startpos_turn=[{self._state.startpos_turn}]')
 
                 # 次のステートへ引継ぎ
                 next_state = GameState()

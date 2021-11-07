@@ -141,9 +141,9 @@ class GameState():
 
             # 経過時間
             if phase == '+':
-                self._expendTimes[1] += expendTime
+                self._position._expend_times[1] += expendTime
             else:
-                self._expendTimes[2] += expendTime
+                self._position._expend_times[2] += expendTime
 
             return '<Position.Move/>'
 

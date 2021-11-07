@@ -83,19 +83,19 @@ END Game_Summary
 
         self._client.client_p.state.position.printBoard()
 
-        '''
-        # TODO 自分が先手か後手か判定
-        if self._client.client_p.user_name == self._client.client_p.state.player_names[1]:
-            my_turn = '+'
-        elif self._client.client_p.user_name == self._client.client_p.state.player_names[2]:
-            my_turn = '-'
-        else:
-            raise ValueError(
-                f'先手後手判定失敗。 user_name=[{self._client.client_p.user_name}] +=[{self._client.client_p.state.player_names[1]}] -=[{self._client.client_p.state.player_names[2]}]')
-        '''
-
+        # 自分が先手か後手か
         print(f"[DEBUG] my_turn=[{self._client.client_p.my_turn}]")
         print(f"[DEBUG] current_turn=[{self._client.client_p.current_turn}]")
+
+        if self._client.client_p.my_turn != self._client.client_p.current_turn:
+            print(f"[ERROR] 手番が違う")
+            return
+
+        print(f"[DEBUG] わたしのターン")
+        # `+5756FU` を送信したとして
+        received = '+5756FU,T20'
+        self._client.client_p.parse_line(received)
+        self._client.client_p.state.position.printBoard()
 
 
 def test():
