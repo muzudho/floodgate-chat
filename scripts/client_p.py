@@ -66,6 +66,7 @@ class ClientP():
                 # 次のステートへ引継ぎ
                 next_state = GameState()
                 next_state.position = self._state.position
+                next_state.player_names = self._state.player_names
                 self._state = next_state
 
         elif self._state.name == '<GameState/>':

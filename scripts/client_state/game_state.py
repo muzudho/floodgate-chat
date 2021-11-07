@@ -13,6 +13,10 @@ class GameState():
         self._move_pattern = re.compile(
             r"^([+-])(\d{2})(\d{2})(\w{2}),T(\d+)$")
 
+        # プレイヤー名 [未使用, 先手プレイヤー名, 後手プレイヤー名]
+        self._player_names = ['', '', '']
+
+        # 局面
         self._position = Position()
 
     @property
@@ -26,6 +30,14 @@ class GameState():
     @position.setter
     def position(self, val):
         self._position = val
+
+    @property
+    def player_names(self):
+        return self._player_names
+
+    @player_names.setter
+    def player_names(self, val):
+        self._player_names = val
 
     def parse_line(self, line):
 

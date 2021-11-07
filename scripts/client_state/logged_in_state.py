@@ -56,6 +56,10 @@ class LoggedInState():
     def position(self):
         return self._position
 
+    @property
+    def player_names(self):
+        return self._player_names
+
     def parse_line(self, line):
 
         # 初期局面終了
