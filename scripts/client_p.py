@@ -111,7 +111,26 @@ class ClientP():
                 self._state = next_state
 
         elif self._state.name == '<GameState/>':
-            pass
+            if result == '<Position.Move/>':
+                # 指し手を反映
+                text = self.state.position.formatBoard()
+                print(text)
+
+            elif result == '<Position.Win/>':
+                # 勝ち
+                s = f"""+----------+
+|    WIN   |
++----------+
+"""
+                print(s)
+
+            elif result == '<Position.Lose/>':
+                # 負け
+                s = f"""+----------+
+|   LOSE   |
++----------+
+"""
+                print(s)
 
         else:
             pass

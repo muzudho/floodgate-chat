@@ -147,6 +147,14 @@ class GameState():
 
             return '<Position.Move/>'
 
+        if line == '#WIN':
+            # 勝ち
+            return '<Position.Win/>'
+
+        if line == '#LOSE':
+            # 負け
+            return '<Position.Lose/>'
+
         return '<Position.Unknown/>'
 
 

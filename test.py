@@ -84,7 +84,8 @@ END Game_Summary
             print(
                 f'Unimplemented begin board. client.client_p.state.name=[{self._client.client_p.state.name}]')
 
-        self._client.client_p.state.position.printBoard()
+        text = self._client.client_p.state.position.formatBoard()
+        print(text)
 
         # 自分が先手か後手か
         print(f"[DEBUG] my_turn=[{self._client.client_p.my_turn}]")
@@ -98,12 +99,14 @@ END Game_Summary
         # `+5756FU` を送信したとして
         received = '+5756FU,T20'
         self._client.client_p.parse_line(received)
-        self._client.client_p.state.position.printBoard()
+        text = self._client.client_p.state.position.formatBoard()
+        print(text)
 
         # 相手が指したとして
         received = '-3334FU,T35'
         self._client.client_p.parse_line(received)
-        self._client.client_p.state.position.printBoard()
+        text = self._client.client_p.state.position.formatBoard()
+        print(text)
 
 
 def test():

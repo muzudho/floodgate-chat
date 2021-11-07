@@ -24,8 +24,10 @@ class Position():
     def hands(self):
         return self._hands
 
-    def printBoard(self):
-        """将棋盤の描画"""
+    def formatBoard(self):
+        """将棋盤の文字列"""
+
+        text = ''
 
         def __prettyHands(indexes):
             def __eraseZero(n):
@@ -60,64 +62,80 @@ class Position():
             return a, b, c, d, e, f, g, h, i
 
         tu = f"{self._turn: >4}"
-        print(f"Turn")
-        print(f"{tu}")
-        print("")
+        text += f"""
+Turn
+{tu}
+
+"""
 
         # 後手の持ち駒、経過時間
         tim2 = f'{self._expend_times[2]: >6}'
         a, b, c, d, e, f, g = __prettyHands([8, 9, 10, 11, 12, 13, 14])
-        print(f"   TIME   HI  KA  KI  GI  KE  KY  FU")
-        print(f" {tim2} |{a} {b} {c} {d} {e} {f} {g}|")
-        print(f"")
+        text += f"""   TIME   HI  KA  KI  GI  KE  KY  FU
+ {tim2} |{a} {b} {c} {d} {e} {f} {g}|
+ 
+ """
+
         # 盤
-        print(f"  9   8   7   6   5   4   3   2   1    ")
-        print(f"+---+---+---+---+---+---+---+---+---+  ")
+        text += f"""  9   8   7   6   5   4   3   2   1    
++---+---+---+---+---+---+---+---+---+  
+"""
         a, b, c, d, e, f, g, h, i = __prettyBoardRow(
             [91, 81, 71, 61, 51, 41, 31, 21, 11])
-        print(f"|{a}|{b}|{c}|{d}|{e}|{f}|{g}|{h}|{i}| 1")
-        print(f"+---+---+---+---+---+---+---+---+---+  ")
+        text += f"""|{a}|{b}|{c}|{d}|{e}|{f}|{g}|{h}|{i}| 1
++---+---+---+---+---+---+---+---+---+  
+"""
         a, b, c, d, e, f, g, h, i = __prettyBoardRow(
             [92, 82, 72, 62, 52, 42, 32, 22, 12])
-        print(f"|{a}|{b}|{c}|{d}|{e}|{f}|{g}|{h}|{i}| 2")
-        print(f"+---+---+---+---+---+---+---+---+---+  ")
+        text += f"""|{a}|{b}|{c}|{d}|{e}|{f}|{g}|{h}|{i}| 2
++---+---+---+---+---+---+---+---+---+  
+"""
         a, b, c, d, e, f, g, h, i = __prettyBoardRow(
             [93, 83, 73, 63, 53, 43, 33, 23, 13])
-        print(f"|{a}|{b}|{c}|{d}|{e}|{f}|{g}|{h}|{i}| 3")
-        print(f"+---+---+---+---+---+---+---+---+---+  ")
+        text += f"""|{a}|{b}|{c}|{d}|{e}|{f}|{g}|{h}|{i}| 3
++---+---+---+---+---+---+---+---+---+  
+"""
         a, b, c, d, e, f, g, h, i = __prettyBoardRow(
             [94, 84, 74, 64, 54, 44, 34, 24, 14])
-        print(f"|{a}|{b}|{c}|{d}|{e}|{f}|{g}|{h}|{i}| 4")
-        print(f"+---+---+---+---+---+---+---+---+---+  ")
+        text += f"""|{a}|{b}|{c}|{d}|{e}|{f}|{g}|{h}|{i}| 4
++---+---+---+---+---+---+---+---+---+  
+"""
         a, b, c, d, e, f, g, h, i = __prettyBoardRow(
             [95, 85, 75, 65, 55, 45, 35, 25, 15])
-        print(f"|{a}|{b}|{c}|{d}|{e}|{f}|{g}|{h}|{i}| 5")
-        print(f"+---+---+---+---+---+---+---+---+---+  ")
+        text += f"""|{a}|{b}|{c}|{d}|{e}|{f}|{g}|{h}|{i}| 5
++---+---+---+---+---+---+---+---+---+  
+"""
         a, b, c, d, e, f, g, h, i = __prettyBoardRow(
             [96, 86, 76, 66, 56, 46, 36, 26, 16])
-        print(f"|{a}|{b}|{c}|{d}|{e}|{f}|{g}|{h}|{i}| 6")
-        print(f"+---+---+---+---+---+---+---+---+---+  ")
+        text += f"""|{a}|{b}|{c}|{d}|{e}|{f}|{g}|{h}|{i}| 6
++---+---+---+---+---+---+---+---+---+  
+"""
         a, b, c, d, e, f, g, h, i = __prettyBoardRow(
             [97, 87, 77, 67, 57, 47, 37, 27, 17])
-        print(f"|{a}|{b}|{c}|{d}|{e}|{f}|{g}|{h}|{i}| 7")
-        print(f"+---+---+---+---+---+---+---+---+---+  ")
+        text += f"""|{a}|{b}|{c}|{d}|{e}|{f}|{g}|{h}|{i}| 7
++---+---+---+---+---+---+---+---+---+  
+"""
         a, b, c, d, e, f, g, h, i = __prettyBoardRow(
             [98, 88, 78, 68, 58, 48, 38, 28, 18])
-        print(f"|{a}|{b}|{c}|{d}|{e}|{f}|{g}|{h}|{i}| 8")
-        print(f"+---+---+---+---+---+---+---+---+---+  ")
+        text += f"""|{a}|{b}|{c}|{d}|{e}|{f}|{g}|{h}|{i}| 8
++---+---+---+---+---+---+---+---+---+  
+"""
         a, b, c, d, e, f, g, h, i = __prettyBoardRow(
             [99, 89, 79, 69, 59, 49, 39, 29, 19])
-        print(f"|{a}|{b}|{c}|{d}|{e}|{f}|{g}|{h}|{i}| 9")
-        print(f"+---+---+---+---+---+---+---+---+---+  ")
+        text += f"""|{a}|{b}|{c}|{d}|{e}|{f}|{g}|{h}|{i}| 9
++---+---+---+---+---+---+---+---+---+  
+"""
         # 先手の経過時間、持ち駒
         tim1 = f'{self._expend_times[1]: >6}'
         a, b, c, d, e, f, g = __prettyHands([1, 2, 3, 4, 5, 6, 7])
-        print(f"")
-        print(f"   Time   HI  KA  KI  GI  KE  KY  FU  ")
-        print(f" {tim1} |{a} {b} {c} {d} {e} {f} {g}|")
-        print(f"")
-        print(f". . . . . . . . . . . . . . . . . . . .")
-        print(f"")
+        text += f"""
+   Time   HI  KA  KI  GI  KE  KY  FU  
+ {tim1} |{a} {b} {c} {d} {e} {f} {g}|
+
+. . . . . . . . . . . . . . . . . . . .
+
+"""
+        return text
 
 
 # Test
@@ -125,7 +143,8 @@ class Position():
 if __name__ == "__main__":
 
     position = Position()
-    position.printBoard()
+    text = position.formatBoard()
+    print(text)
 
     # 開始局面
     # Example:
@@ -140,38 +159,49 @@ if __name__ == "__main__":
     # P9+KY+KE+GI+KI+OU+KI+GI+KE+KY
 
     position.parse_line('P1-KY-KE-GI-KI-OU-KI-GI-KE-KY')
-    position.printBoard()
+    text = position.formatBoard()
+    print(text)
 
     position.parse_line('P2 * -HI *  *  *  *  * -KA * ')
-    position.printBoard()
+    text = position.formatBoard()
+    print(text)
 
     position.parse_line('P3-FU-FU-FU-FU-FU-FU-FU-FU-FU')
-    position.printBoard()
+    text = position.formatBoard()
+    print(text)
 
     position.parse_line('P4 *  *  *  *  *  *  *  *  * ')
-    position.printBoard()
+    text = position.formatBoard()
+    print(text)
 
     position.parse_line('P5 *  *  *  *  *  *  *  *  * ')
-    position.printBoard()
+    text = position.formatBoard()
+    print(text)
 
     position.parse_line('P6 *  *  *  *  *  *  *  *  * ')
-    position.printBoard()
+    text = position.formatBoard()
+    print(text)
 
     position.parse_line('P7+FU+FU+FU+FU+FU+FU+FU+FU+FU')
-    position.printBoard()
+    text = position.formatBoard()
+    print(text)
 
     position.parse_line('P8 * +KA *  *  *  *  * +HI * ')
-    position.printBoard()
+    text = position.formatBoard()
+    print(text)
 
     position.parse_line('P9+KY+KE+GI+KI+OU+KI+GI+KE+KY')
-    position.printBoard()
+    text = position.formatBoard()
+    print(text)
 
     # 指し手
     # Example: +7776FU,T20
     # Example: -8384FU,T1
 
     position.parse_line('+7776FU,T20')
-    position.printBoard()
+    text = position.formatBoard()
+    print(text)
 
     position.parse_line('-8384FU,T1')
-    position.printBoard()
+    text = position.formatBoard()
+    print(text)
