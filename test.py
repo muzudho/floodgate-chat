@@ -28,6 +28,9 @@ class Test():
         self._client.clean_up()
 
     def run(self):
+        """
+        client-chat-3.log.txt 参照
+        """
 
         # Send `LOGIN e-gov-vote-kifuwarabe floodgate-300-10F,egov-kif`
 
@@ -94,6 +97,11 @@ END Game_Summary
         print(f"[DEBUG] わたしのターン")
         # `+5756FU` を送信したとして
         received = '+5756FU,T20'
+        self._client.client_p.parse_line(received)
+        self._client.client_p.state.position.printBoard()
+
+        # 相手が指したとして
+        received = '-3334FU,T35'
         self._client.client_p.parse_line(received)
         self._client.client_p.state.position.printBoard()
 
