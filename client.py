@@ -23,6 +23,12 @@ class Client():
 
         self._client_p = ClientP()
 
+        # Implement all handlers
+        def __agree_func():
+            client_socket.send_line(f"AGREE {self.client_p._game_id}\n")
+
+        self.client_p.agree_func = __agree_func
+
     def clean_up(self):
         print("# Clean up")
 
@@ -89,12 +95,6 @@ def main():
     signal.signal(signal.SIGTERM, sigterm_handler)
     client = Client()
     client.set_up()
-
-    # Implement all handlers
-    def __agree_func():
-        client_socket.send_line(f"AGREE {client.client_p._game_id}\n")
-
-    client.client_p.agree_func = __agree_func
 
     try:
         client.run()

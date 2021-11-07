@@ -4,28 +4,34 @@ from client import Client
 from scripts.client_p import SplitTextBlock
 
 
-def test():
-    def sigterm_handler(_signum, _frame) -> None:
-        sys.exit(1)
+class Test():
+    def __init__(self):
+        self._client = None
 
-    # 強制終了のシグナルを受け取ったら、強制終了するようにします
-    signal.signal(signal.SIGTERM, sigterm_handler)
-    client = Client()
-    client.set_up()
+    @property
+    def client(self):
+        return self._client
 
-    # Implement test handlers
-    def __agree_func():
-        """AGREE を送ると、 START: が返ってくるというシナリオ"""
-        received = 'START:wdoor+floodgate-300-10F+e-gov-vote-kifuwarabe+Kristallweizen-Core2Duo-P7450+20211105220005'
-        client.client_p.parse_line(received)
+    def set_up(self):
+        self._client = Client()
+        self._client.set_up()
 
-    client.client_p.agree_func = __agree_func
+        # Implement test handlers
+        def __agree_func():
+            """AGREE を送ると、 START: が返ってくるというシナリオ"""
+            received = 'START:wdoor+floodgate-300-10F+e-gov-vote-kifuwarabe+Kristallweizen-Core2Duo-P7450+20211105220005'
+            self._client.client_p.parse_line(received)
 
-    try:
+        self._client.client_p.agree_func = __agree_func
+
+    def clean_up(self):
+        self._client.clean_up()
+
+    def run(self):
         # Send `LOGIN e-gov-vote-kifuwarabe floodgate-300-10F,egov-kif`
         received = 'LOGIN:egov-kifuwarabe OK'
-        client.client_p.parse_line(received)
-        if client.client_p.state.name != '<LoggedInState/>':
+        self._client.client_p.parse_line(received)
+        if self._client.client_p.state.name != '<LoggedInState/>':
             print('Unimplemented login')
 
         received = """BEGIN Game_Summary
@@ -66,22 +72,36 @@ END Game_Summary
 
         for line in lines:
             print(
-                f"[DEBUG] state=[{client.client_p.state.name}] line=[{line}]")
-            client.client_p.parse_line(line)
+                f"[DEBUG] state=[{self._client.client_p.state.name}] line=[{line}]")
+            self._client.client_p.parse_line(line)
 
-        if client.client_p.state.name != '<GameState/>':
+        if self._client.client_p.state.name != '<GameState/>':
             print(
-                f'Unimplemented begin board. client.client_p.state.name=[{client.client_p.state.name}]')
+                f'Unimplemented begin board. client.client_p.state.name=[{self._client.client_p.state.name}]')
 
-        client.client_p.state.position.printBoard()
+        self._client.client_p.state.position.printBoard()
 
         # TODO 自分が先手か後手か判定
+
+
+def test():
+    def sigterm_handler(_signum, _frame) -> None:
+        sys.exit(1)
+
+    # 強制終了のシグナルを受け取ったら、強制終了するようにします
+    signal.signal(signal.SIGTERM, sigterm_handler)
+
+    test = Test()
+    test.set_up()
+
+    try:
+        test.run()
 
     finally:
         # 強制終了のシグナルを無視するようにしてから、クリーンアップ処理へ進みます
         signal.signal(signal.SIGTERM, signal.SIG_IGN)
         signal.signal(signal.SIGINT, signal.SIG_IGN)
-        client.clean_up()
+        test.clean_up()
         # 強制終了のシグナルを有効に戻します
         signal.signal(signal.SIGTERM, signal.SIG_DFL)
         signal.signal(signal.SIGINT, signal.SIG_DFL)
