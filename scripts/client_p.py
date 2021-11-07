@@ -67,8 +67,6 @@ class ClientP():
         self._agree_func = func
 
     def parse_line(self, line):
-        # print(f"parse_line: line=[{line}]")
-
         result = self._state.parse_line(line)
         log_output.display_and_log_internal(
             f"[DEBUG] state=[{self._state.name}] result=[{result}]")
@@ -79,8 +77,6 @@ class ClientP():
 
                 # 読み取った情報の記憶
                 self._user_name = self._state.user_name
-                # print(
-                #    f'読み取った情報の記憶 user_name=[{self._state.user_name}]')
 
                 # 次のステートへ引継ぎ
                 next_state = LoggedInState()
@@ -101,8 +97,6 @@ class ClientP():
                 # 読み取った情報の記憶
                 self._my_turn = self._state.my_turn
                 self._current_turn = self._state.startpos_turn
-                # print(
-                #     f'読み取った情報の記憶 my_turn=[{self._state.my_turn}] startpos_turn=[{self._state.startpos_turn}]')
 
                 # 次のステートへ引継ぎ
                 next_state = GameState()
@@ -112,9 +106,10 @@ class ClientP():
 
         elif self._state.name == '<GameState/>':
             if result == '<Position.Move/>':
-                # 指し手を反映
+                # 指し手を反映した
+                # 盤表示
                 text = self.state.position.formatBoard()
-                print(text)
+                log_output.display_and_log_internal(text)
 
             elif result == '<Position.Win/>':
                 # 勝ち
@@ -122,7 +117,7 @@ class ClientP():
 |    WIN   |
 +----------+
 """
-                print(s)
+                log_output.display_and_log_internal(s)
 
             elif result == '<Position.Lose/>':
                 # 負け
@@ -130,7 +125,7 @@ class ClientP():
 |   LOSE   |
 +----------+
 """
-                print(s)
+                log_output.display_and_log_internal(s)
 
         else:
             pass
