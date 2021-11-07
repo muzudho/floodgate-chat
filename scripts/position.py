@@ -4,12 +4,6 @@ import re
 class Position():
     def __init__(self):
 
-        # 自分または相手の指し手と、その消費時間
-        # Format: `<先後><元升><先升><駒>,T<秒>`
-        # Example: `+5756FU,T20`
-        self._move_pattern = re.compile(
-            r"^([+-])(\d{2})(\d{2})(\w{2}),T(\d+)$")
-
         # 将棋盤
         self._board = [''] * 100
 
@@ -29,116 +23,6 @@ class Position():
     @property
     def hands(self):
         return self._hands
-
-    def parse_line(self, line):
-
-        # 指し手
-        result = self._move_pattern.match(line)
-        if result:
-            phase = result.group(1)
-            source = int(result.group(2))
-            destination = int(result.group(3))
-            expendTime = int(result.group(5))
-
-            piece = result.group(4)
-            srcPc = self._board[source]  # sourcePiece
-            dstPc = self._board[destination]  # destinationPiece
-            # print(f"Move> {result.group(0)} [phase]{phase:>2} [source]{source:>2} [destination]{destination} [piece]{piece} srcPc[{srcPc}] dstPc[{dstPc}]")
-            if source != 0 and srcPc == ' * ':
-                raise Exception("空マスから駒を動かそうとしました")
-
-            # 駒を打つとき、駒台から減らす
-            if source == 0:
-                if phase == '+':
-                    srcPc = '+{}'.format(piece)
-                    if piece == 'FU':
-                        self._hands[7] -= 1
-                    elif piece == 'KY':
-                        self._hands[6] -= 1
-                    elif piece == 'KE':
-                        self._hands[5] -= 1
-                    elif piece == 'GI':
-                        self._hands[4] -= 1
-                    elif piece == 'KI':
-                        self._hands[3] -= 1
-                    elif piece == 'KA':
-                        self._hands[2] -= 1
-                    elif piece == 'HI':
-                        self._hands[1] -= 1
-                    else:
-                        raise Exception(f"+ phase={phase} piece={piece}")
-                elif phase == '-':
-                    srcPc = '-{}'.format(piece)
-                    if piece == 'FU':
-                        self._hands[14] -= 1
-                    elif piece == 'KY':
-                        self._hands[13] -= 1
-                    elif piece == 'KE':
-                        self._hands[12] -= 1
-                    elif piece == 'GI':
-                        self._hands[11] -= 1
-                    elif piece == 'KI':
-                        self._hands[10] -= 1
-                    elif piece == 'KA':
-                        self._hands[9] -= 1
-                    elif piece == 'HI':
-                        self._hands[8] -= 1
-                    else:
-                        raise Exception(f"- phase={phase} piece={piece}")
-
-            # 移動先に駒があれば駒台へ移動
-            if phase == '+':
-                if dstPc == "-FU" or dstPc == "-TO":
-                    self._hands[7] += 1
-                elif dstPc == "-KY" or dstPc == "-NY":
-                    self._hands[6] += 1
-                elif dstPc == "-KE" or dstPc == "-NK":
-                    self._hands[5] += 1
-                elif dstPc == "-GI" or dstPc == "-NG":
-                    self._hands[4] += 1
-                elif dstPc == "-KI":
-                    self._hands[3] += 1
-                elif dstPc == "-KA" or dstPc == "-UM":
-                    self._hands[2] += 1
-                elif dstPc == "-HI" or dstPc == "-RY":
-                    self._hands[1] += 1
-                elif dstPc == "-OU":
-                    pass
-            elif phase == '-':
-                if dstPc == "+FU" or dstPc == "+TO":
-                    self._hands[14] += 1
-                elif dstPc == "+KY" or dstPc == "+NY":
-                    self._hands[13] += 1
-                elif dstPc == "+KE" or dstPc == "+NK":
-                    self._hands[12] += 1
-                elif dstPc == "+GI" or dstPc == "+NG":
-                    self._hands[11] += 1
-                elif dstPc == "+KI":
-                    self._hands[10] += 1
-                elif dstPc == "+KA" or dstPc == "+UM":
-                    self._hands[9] += 1
-                elif dstPc == "+HI" or dstPc == "+RY":
-                    self._hands[8] += 1
-                elif dstPc == "+OU":
-                    pass
-            else:
-                raise Exception(f"Caputure piece. phase={phase}")
-
-            # 移動元の駒を消す
-            self._board[source] = " * "
-
-            # 移動先に駒を置く
-            self._board[destination] = srcPc
-
-            # 経過時間
-            if phase == '+':
-                self._expendTimes[1] += expendTime
-            else:
-                self._expendTimes[2] += expendTime
-
-            return '<Position.Move/>'
-
-        return '<Position.Unknown/>'
 
     def printBoard(self):
         """将棋盤の描画"""
