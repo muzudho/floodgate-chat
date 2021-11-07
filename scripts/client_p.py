@@ -22,6 +22,8 @@ class ClientP():
         self._user_name = ''
         self._game_id = ''
         self._start_game_id = ''
+        self._my_turn = ''
+        self._current_turn = ''
 
         def none_func():
             pass
@@ -39,6 +41,22 @@ class ClientP():
     @user_name.setter
     def user_name(self, val):
         self._user_name = val
+
+    @property
+    def my_turn(self):
+        return self._my_turn
+
+    @my_turn.setter
+    def my_turn(self, val):
+        self._my_turn = val
+
+    @property
+    def current_turn(self):
+        return self._current_turn
+
+    @current_turn.setter
+    def current_turn(self, val):
+        self._current_turn = val
 
     @property
     def agree_func(self):
@@ -61,7 +79,8 @@ class ClientP():
 
                 # 読み取った情報の記憶
                 self._user_name = self._state.user_name
-                print(f'読み取った情報の記憶 user_name=[{self._state.user_name}]')
+                print(
+                    f'読み取った情報の記憶 user_name=[{self._state.user_name}]')
 
                 # 次のステートへ引継ぎ
                 next_state = LoggedInState()
@@ -78,6 +97,12 @@ class ClientP():
             elif result == '<LoggedInState.Start/>':
                 # 対局成立
                 self._start_game_id = self._state.start_game_id
+
+                # 読み取った情報の記憶
+                self._my_turn = self._state.my_turn
+                self._current_turn = self._state.startpos_turn
+                print(
+                    f'読み取った情報の記憶 my_turn=[{self._state.my_turn}] startpos_turn=[{self._state.startpos_turn}]')
 
                 # 次のステートへ引継ぎ
                 next_state = GameState()

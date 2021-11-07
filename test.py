@@ -83,6 +83,7 @@ END Game_Summary
 
         self._client.client_p.state.position.printBoard()
 
+        '''
         # TODO 自分が先手か後手か判定
         if self._client.client_p.user_name == self._client.client_p.state.player_names[1]:
             my_turn = '+'
@@ -91,9 +92,10 @@ END Game_Summary
         else:
             raise ValueError(
                 f'先手後手判定失敗。 user_name=[{self._client.client_p.user_name}] +=[{self._client.client_p.state.player_names[1]}] -=[{self._client.client_p.state.player_names[2]}]')
+        '''
 
-        print(
-            f"[DEBUG] my_turn=[{my_turn}]")
+        print(f"[DEBUG] my_turn=[{self._client.client_p.my_turn}]")
+        print(f"[DEBUG] current_turn=[{self._client.client_p.current_turn}]")
 
 
 def test():

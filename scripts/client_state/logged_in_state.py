@@ -11,13 +11,27 @@ class LoggedInState():
         self._game_id = ''
 
         # 先手、後手プレイヤー名判定
-        # Format: Name<SenteOrGote>:<PlayerName>
-        # Example: Name+:John
-        # Example: Name-:e-gov-vote-kifuwarabe
+        # Format: `Name<SenteOrGote>:<PlayerName>`
+        # Example: `Name+:John`
+        # Example: `Name-:e-gov-vote-kifuwarabe`
         self._player_name_pattern = re.compile(
             r'^Name([+-]):([0-9A-Za-z_-]+)$')
         # プレイヤー名 [未使用, 先手プレイヤー名, 後手プレイヤー名]
         self._player_names = ['', '', '']
+
+        # わたしの手番
+        # Format: `Your_Turn:<Turn>`
+        # Example: `Your_Turn:+`
+        self._my_turn_pattern = re.compile(
+            r'^Your_Turn:([+-])$')
+        self._my_turn = ''
+
+        # 開始局面での手番
+        # Format: `To_Move:<Turn>`
+        # Example: `To_Move:+`
+        self._startpos_turn_pattern = re.compile(
+            r'^To_Move:([+-])$')
+        self._startpos_turn = ''
 
         # Format: `START:<GameID>`
         # Example: `START:wdoor+floodgate-300-10F+e-gov-vote-kifuwarabe+Kristallweizen-Core2Duo-P7450+20211105220005`
@@ -53,12 +67,24 @@ class LoggedInState():
         return self._start_game_id
 
     @property
+    def my_turn(self):
+        return self._my_turn
+
+    @property
     def position(self):
         return self._position
 
     @property
     def player_names(self):
         return self._player_names
+
+    @property
+    def my_turn(self):
+        return self._my_turn
+
+    @property
+    def startpos_turn(self):
+        return self._startpos_turn
 
     def parse_line(self, line):
 
@@ -79,6 +105,18 @@ class LoggedInState():
                 raise ValueError(f'ここにはこないはず')
 
             return '<LoggedInState.Turn/>'
+
+        # 自分のターン
+        matched = self._my_turn_pattern.match(line)
+        if matched:
+            self._my_turn = matched.group(1)
+            return '<LoggedInState.MyTurn/>'
+
+        # 開始局面のターン
+        matched = self._startpos_turn_pattern.match(line)
+        if matched:
+            self._startpos_turn = matched.group(1)
+            return '<LoggedInState.StartPosTurn/>'
 
         # Game_ID
         matched = self._game_id_pattern.match(line)
